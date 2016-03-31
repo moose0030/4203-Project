@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery.post demo</title>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+</head>
+<body>
+ 
+<form action="/" id="searchForm">
+  <input type="text" name="s" placeholder="Search...">
+  <input type="submit" value="Search">
+</form>
+<!-- the result of the search will be rendered inside this div -->
+<div id="result"></div>
+ 
+<script>
+ var socket = io();
+
+socket.on('_post', function(data){
+        $( "#result" ).append(data);
+      });
+</script>
+ 
+</body>
+</html>
