@@ -27,25 +27,25 @@ socket.on('_post', function(data){
 });
 
 socket.on('_post_rpi_wifi',function(data){
-  $("rpi_wifi").append(data);
+  $("#rpi_wifi").append(data);
 });
 
 socket.on('_post_rpi_bluetooth',function(data){
-  $("rpi_bluetooth").append(data);
+  $("#rpi_bluetooth").append(data);
 });
 
 socket.on('_post_wemo_switch',function(data){
-  $("wemo_switch").append(data);
+  $("#wemo_switch").append(data);
 });
 
 socket.on('_post_wemo_motion',function(data){
-  $("wemo_motion").append(data);
+  $("#wemo_motion").append(data);
 });
 socket.on('_post_weather',function(data){
-  $("weather").append(data);
+  $("#weather").append(data);
 });
 socket.on('_post',function(data){
-  $("other").append(data);
+  $("#other").append(data);
 });
 </script>
  
