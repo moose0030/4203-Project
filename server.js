@@ -15,41 +15,25 @@ function handler (req, res) {
       res.writeHead(200);
       res.end(data);
   });
+
   if(req.method == 'POST'){
-    //WEATHER SENSOR
-    var num = 0;
-    
-    /*switch(num){
-        case WEATHER:break;
-        case RPI-WIFI:break;
-        case RPI-BT:break;
-        case WEMO-SWICTH:break;
-        case WEMO-MOTION:break;
-    }*/
-    //RPi WiFi
-
-    //RPi Bluetooth
-
-    //WeMo Switch
-
-    //WeMo Motion Sensor
     var body = ''
-
-    console.log(req.method + 'It was a post...')
     
     req.on('data', function (data) {
         body += data;
-        console.log("Partial body: " + body);
     });
 
     req.on('end', function () {
         console.log("Body: " + body)
-        if(body.type == 'RPI-WIFI')
-            io.emit('_post_rpi_wifi',body)
-        else
-            io.emit('_post',body);
-   });
-
+        var json = body, obj = JSON.parse(json);  
+        console.log(obj.type)
+        console.log(obj)
+        switch(obj.type){
+            case "RPI-WIFI":io.emit('_post_rpi_wifi',obj);break;
+            case "RPI-BT": io.emit('_post_rpi_bluetooth',obj);break;
+            default:  io.emit('_post',body);
+        }
+    });
 }
 }
 
