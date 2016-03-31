@@ -19,7 +19,10 @@
  var socket = io();
 
 socket.on('_post', function(data){
-        $( "#result" ).append(data);
+    var json = '{"result":true,"count":1}',
+    obj = JSON.parse(json);
+    
+        $( "#result" ).append(obj.result + ' ' + obj.count);
       });
 </script>
  
