@@ -1,5 +1,6 @@
-var port = process.env.PORT || 1337;
+var http = require('http')
 var fs = require('fs');
+var port = process.env.PORT || 1337;
 var server = http.createServer( function(req, res) {
 
     console.dir(req.param);
@@ -26,8 +27,6 @@ var server = http.createServer( function(req, res) {
         res.end('');
     }
 
-});
+}).listen(port);
 
-var port = process.env.PORT || 1337;
-server.listen(port, host);
-console.log('Listening at http://' + host + ':' + port);
+console.log('Listening on ' + port);
