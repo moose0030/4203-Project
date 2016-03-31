@@ -2,28 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>jQuery.post demo</title>
+  <title>IoT Dashboard</title>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 </head>
 <body>
  
-<form action="/" id="searchForm">
-  <input type="text" name="s" placeholder="Search...">
-  <input type="submit" value="Search">
-</form>
+
 <!-- the result of the search will be rendered inside this div -->
-<div id="result"></div>
+<div id="rpi_wifi"></div>
+<div id="rpi_bluetooth"></div>
+<div id="wemo_switch"></div>
+<div id="wemo_motion"></div>
+<div id="weather"></div>
+
  
 <script>
- var socket = io();
-
+var socket = io();
 socket.on('_post', function(data){
-    var json = '{"result":true,"count":1}',
-    obj = JSON.parse(json);
-    
-        $( "#result" ).append(obj.result + ' ' + obj.count);
-      });
+  var json = '{"result":true,"count":1}',
+  obj = JSON.parse(json);  
+  $( "#result" ).append(obj.result + ' ' + obj.count);
+});
+
+socket.on('_post_rpi_wifi',function(data){
+  $("rpi_wifi").append(data);
+});
+
+socket.on('_post_rpi_bluetooth',function(data){
+  $("rpi_bluetooth").append(data);
+});
+
+socket.on('_post_wemo_switch',function(data){
+  $("wemo_switch").append(data);
+});
+
+socket.on('_post_wemo_motion',function(data){
+  $("wemo_motion").append(data);
+});
+socket.on('_post_weather',function(data){
+  $("weather").append(data);
+});
 </script>
  
 </body>

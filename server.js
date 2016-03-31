@@ -33,12 +33,21 @@ function handler (req, res) {
     //WeMo Switch
 
     //WeMo Motion Sensor
+    var body = ''
 
     console.log(req.method + 'It was a post...')
-    var body = '';
+    
+    req.on('data', function (data) {
+        body += data;
+        console.log("Partial body: " + body);
+    });
+
     req.on('end', function () {
+        
        console.log("Body: " + body)
-       
+       if(body.type == 'RPI-WIFI')
+        io.emit('_post_rpi_wifi',body)
+
         io.emit('_post',body);
    });
 
