@@ -43,12 +43,11 @@ function handler (req, res) {
     });
 
     req.on('end', function () {
-        
-       console.log("Body: " + body)
-       if(body.type == 'RPI-WIFI')
-        io.emit('_post_rpi_wifi',body)
-
-        io.emit('_post',body);
+        console.log("Body: " + body)
+        if(body.type == 'RPI-WIFI')
+            io.emit('_post_rpi_wifi',body)
+        else
+            io.emit('_post',body);
    });
 
 }

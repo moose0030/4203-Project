@@ -15,6 +15,7 @@
 <div id="wemo_switch"></div>
 <div id="wemo_motion"></div>
 <div id="weather"></div>
+<div id="other"></div>
 
  
 <script>
@@ -42,6 +43,9 @@ socket.on('_post_wemo_motion',function(data){
 });
 socket.on('_post_weather',function(data){
   $("weather").append(data);
+});
+socket.on('_post',function(data){
+  $("other").append(data);
 });
 </script>
  
