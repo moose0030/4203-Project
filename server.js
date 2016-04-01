@@ -24,20 +24,17 @@ function handler (req, res) {
     });
 
     req.on('end', function () {
-        console.log("Body: " + body)
         var json = body, obj = JSON.parse(json);  
-        console.log(obj.type)
-        console.log(obj)
+    
         switch(obj.type){
-            case "RPI-WIFI":io.emit('_post_rpi_wifi',obj);break;
-            case "RPI-BT": io.emit('_post_rpi_bluetooth',obj);break;
-            default:  io.emit('_post',body);
+            case "RPI-WIFI":console.log(obj.type);io.emit('_post_rpi_wifi',obj); break;
+            case "RPI-BT": console.log(obj.type);io.emit('_post_rpi_bluetooth',obj); break;
+            case "WEMO-SWITCH": console.log(obj.type);io.emit('_post_wemo_switch',obj); break;
+            case "WEMO-MOTION":console.log(obj.type);break;
+            default:  console.log(obj.type);io.emit('_post',body);
         }
     });
 }
 }
-
-
-
 
 console.log('Listening...');
