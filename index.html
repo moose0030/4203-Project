@@ -35,7 +35,7 @@
             </div><!--/span-->
             <div class="span4">
               <h2>Wemo Motion</h2>
-              <p></p>
+              <p id = "wemo_motion"></p>
               <p><a class="btn" href="#">View details &raquo;</a></p>
             </div><!--/span-->
           </div><!--/row-->
@@ -105,7 +105,8 @@ socket.on('_post_wemo_switch',function(data){
 
 socket.on('_post_wemo_motion',function(data){
   console.log('_post_wemo_motion');
-  $("#wemo_motion").append(data);
+  $("#wemo_motion").append(data.type);
+  $("#wemo_motion").append(data.status);
 });
 
 socket.on('_post_weather',function(data){
