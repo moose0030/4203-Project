@@ -78,7 +78,6 @@
   <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-typeahead.js"></script>
   <script> 
   var socket = io();
-
 socket.on('_post', function(data){
   var json = '{"result":true,"count":1}',
   obj = JSON.parse(json);  
@@ -135,15 +134,46 @@ socket.on('_post_android_network',function(data){
 });
 
 socket.on('_load',function(data){
-  console.log('_load');
-  $("#rpi_bluetooth").text(data);
-  $("#rpi_wifi").text(data);
-  $("#wemo_motion").text(data);
-  $("#wemo_switch").text(data);
-  $("#android_sms").text(data);
-  $("#android_location").text(data);
+  console.log(data.rpi_bt[0]);
+  console.log(data);
+  $("#rpi_bluetooth").html("");
+  $("#rpi_wifi").html("");
+  $("#wemo_motion").html("");
+  $("#wemo_switch").html("");
+  $("#android_sms").html("");
+  $("#android_location").html("");
 
+  function printRPIBluetooth(element, index, array) {
+    $("#rpi_bluetooth").append(element.device);
+  }
+  function printRPIWifi(element, index, array) {
+    $("#rpi_wifi").append(element.device);
+  }
+  function printWemoMotion(element, index, array) {
+    $("#wemo_motion").append(element.device);
+  }
+  function printWemoSwitch(element, index, array) {
+    $("#wemo_switch").append(element.device);
+  }
+  function printAndroidSMS(element, index, array) {
+    $("#android_sms").append(element.device);
+  }
+  function printAndroidLocation(element, index, array) {
+    $("#android_location").append(element.device);
+  }
+
+  data.rpi_bt.forEach(printRPIBluetooth);
+  data.rpi_wifi.forEach(printRPIWifi);
+  data.wemo_switch.forEach(printWemoSwitch);
+  data.wemo_motion.forEach(printWemoMotion);
+  data.android_sms.forEach(printAndroidSMS);
+  data.android_location.forEach(printAndroidLocation);
+
+  
 });
+
+
+
 
   </script>
 </body>

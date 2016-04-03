@@ -1,5 +1,5 @@
 var app = require('http').createServer(handler)
-, io = require('socket.io').listen(app)
+, io = require('socket.io')(app)
 , fs = require('fs')
 
 var port = process.env.PORT || 1337;
@@ -52,13 +52,14 @@ function handler (req, res) {
 
 io.on('connection', function (socket) {
   console.log("Connected");
-  socket.emit('load', packageEvents());
+  socket.emit('_load', packageEvents());
   });
 
 console.log('Listening...');
 
 function packageEvents(){
   events.rpi_bt = rpi_bt;
+  console.log(events.rpi_bt);
   events.rpi_wifi = rpi_wifi;
   events.wemo_switch = wemo_switch;
   events.wemo_motion = wemo_motion;
