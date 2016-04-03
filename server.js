@@ -51,18 +51,19 @@ function handler (req, res) {
 }
 
 io.on('connection', function (socket) {
-  socket.emit('load', packageEvents);
+  console.log("Connected");
+  socket.emit('load', packageEvents());
   });
 
 console.log('Listening...');
 
 function packageEvents(){
-  events.put("rpi_bt",rpi_bt);
-  events.put("rpi_wifi",rpi_wifi);
-  events.put("wemo_switch",wemo_switch);
-  events.put("wemo_motion",wemo_motion);
-  events.put("android_location",android_location);
-  events.put("android_sms",android_sms);
+  events.rpi_bt = rpi_bt;
+  events.rpi_wifi = rpi_wifi;
+  events.wemo_switch = wemo_switch;
+  events.wemo_motion = wemo_motion;
+  events.android_location = android_location;
+  events.android_sms = android_sms;
 
   return events;
 }
