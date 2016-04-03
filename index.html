@@ -29,8 +29,8 @@
               <p><a class="btn" href="#">View details &raquo;</a></p>
             </div><!--/span-->
             <div class="span4">
-              <h2>Weather</h2>
-              <p></p>
+              <h2>Android SMS</h2>
+              <p id="android_sms"></p>
               <p><a class="btn" href="#">View details &raquo;</a></p>
             </div><!--/span-->
             <div class="span4">
@@ -51,8 +51,8 @@
               <p><a class="btn" href="#">View details &raquo;</a></p>
             </div><!--/span-->
             <div class="span4">
-              <h2>Other</h2>
-              <p id = "other"></p>
+              <h2>Android Location</h2>
+              <p id = "android_location"></p>
             </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
@@ -114,9 +114,35 @@ socket.on('_post_weather',function(data){
   $("#weather").append(data);
 });
 
-socket.on('_post',function(data){
-  console.log('_post');
-  $("#other").append(data);
+socket.on('_post_android_battery',function(data){
+  console.log('_post_weather');
+  $("#android").append(data);
+});
+
+socket.on('_post_android_location',function(data){
+  console.log('_post_weather');
+  $("#android").append(data);
+});
+
+socket.on('_post_android_sms',function(data){
+  console.log('_post_weather');
+  $("#android").append(data);
+});
+
+socket.on('_post_android_network',function(data){
+  console.log('_post_weather');
+  $("#android").append(data);
+});
+
+socket.on('_load',function(data){
+  console.log('_load');
+  $("#rpi_bluetooth").text(data);
+  $("#rpi_wifi").text(data);
+  $("#wemo_motion").text(data);
+  $("#wemo_switch").text(data);
+  $("#android_sms").text(data);
+  $("#android_location").text(data);
+
 });
 
   </script>
