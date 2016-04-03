@@ -134,7 +134,8 @@ socket.on('_post_android_network',function(data){
 });
 
 socket.on('_load',function(data){
-  console.log(data.rpi_bt[0]);
+  console.log(data.rpi_bt[0].devices[0].name);
+  console.log(data.rpi_wifi[0].devices[0].signal);
   console.log(data);
   $("#rpi_bluetooth").html("");
   $("#rpi_wifi").html("");
@@ -144,10 +145,10 @@ socket.on('_load',function(data){
   $("#android_location").html("");
 
   function printRPIBluetooth(element, index, array) {
-    $("#rpi_bluetooth").append(element.device);
+    $("#rpi_bluetooth").append(element.devices[0].name);
   }
   function printRPIWifi(element, index, array) {
-    $("#rpi_wifi").append(element.device);
+    $("#rpi_wifi").append(element.devices[0].signal);
   }
   function printWemoMotion(element, index, array) {
     $("#wemo_motion").append(element.device);
