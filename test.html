@@ -9,26 +9,11 @@
     <meta name="author" content="">
     <link rel="icon" href="bootstrap/favicon.ico">
 
-    <title>Dashboard Template for Bootstrap</title>
+    <title>Analysis of Things</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="bootstrap/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="bootstrap/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body>
@@ -36,62 +21,72 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">IoT Dashboard</a>
+          <a class="navbar-brand" href="#">Analysis of Things</a>
         </div>
       </div>
     </nav>
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar"<a href="" >Overview</a>
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">All Graphs</a></li>
-            <li><a href="#">Live Feed</a></li>
+        <div class="col-sm-4 col-md-2 sidebar">
+          <ul class="nav nav-sidebar" id="overview"<a href="" >Overview</a>
+            <li id="graphs"><a onClick="switchThing('graphs')">All Graphs</a></li>
+            <li id="live-feed"><a onClick="switchThing('live-feed')">Live Feed</a></li>
           </ul>
-          <ul class="nav nav-sidebar"<a> Raspberry Pi</a>
-            <li><a href="">Wi-Fi</a></li>
-            <li><a href="">Bluetooth</a></li>
+          <ul class="nav nav-sidebar" id="raspberrypi"<a> Raspberry Pi</a>
+            <li id="rpi-wifi"><a onClick="switchThing('rpi-wifi')">Wi-Fi</a></li>
+            <li id="rpi-bt"><a onClick="switchThing('rpi-bt')">Bluetooth</a></li>
           </ul>
-          <ul class="nav nav-sidebar"<a> WEMO </a>
-            <li><a href="" onClick="switchThing('wemo-switch')">Switch</a></li>
-            <li><a href="">Motion</a></li>
+          <ul class="nav nav-sidebar" id="wemo"<a> WEMO </a>
+            <li class="" id="wemo-switch"><a onClick="switchThing('wemo-switch')">Switch</a></li>
+            <li class ="" id="wemo-motion"><a onClick="switchThing('wemo-motion')">Motion</a></li>
           </ul>
-          <ul class="nav nav-sidebar" <a> Android </a>
-            <li><a href="">SMS</a></li>
-            <li><a href="">Location</a></li>
+          <ul class="nav nav-sidebar" id="android"<a> Android </a>
+            <li id="android-sms"><a onClick="switchThing('android-sms')">SMS</a></li>
+            <li id="android-location"><a onClick="switchThing('android-location')">Location</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard</h1>
+          <h1 class="page-header">Dashboard
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Update Interval
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu" id="choose-speed">
+    <li><a href="#">10</a></li>
+    <li><a href="#">5</a></li>
+    <li><a href="#">2</a></li>
+  </ul>
+</div>
+
+          </h1>
 
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="400" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
+               <canvas id="chart1" width="200" height="200"></canvas>
+              <h4 id ="chart1-title">Label</h4>
+              <span class="text-muted" id="chart1-subtitle">Something else</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="400" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
+             <canvas id="chart2" width="200" height="200"></canvas>
+              <h4 id ="chart2-title">Label</h4>
               <span class="text-muted">Something else</span>
             </div>
           </div>
 
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="400" class="img-responsive" alt="Generic placeholder thumbnail">
+              <canvas id="chart3" width="200" height="200"></canvas>
               <h4>Label</h4>
               <span class="text-muted">Something else</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="400" class="img-responsive" alt="Generic placeholder thumbnail">
+             <canvas id="chart4" width="200" height="200"></canvas>
               <h4>Label</h4>
               <span class="text-muted">Something else</span>
             </div>
           </div>
 
-          <h2 class="sub-header">Section title</h2>
+          <h2 class="sub-header" id = "mainTable">Raw Data</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -125,97 +120,6 @@
                   <td>odio</td>
                   <td>Praesent</td>
                 </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -227,7 +131,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.0/Chart.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
     <script src="bootstrap/js/vendor/holder.min.js"></script>
@@ -237,6 +141,184 @@
     /*
     add event listeners and js from other html file
     */
+
+  $('#choose-speed li').on('click', function(){
+    console.log($(this).text());
+    setNewInterval(new Number($(this).text()));
+
+  });
+
+    var data = [
+   {
+      value: 25,
+      label: 'Java',
+      color: '#811BD6'
+   },
+   {
+      value: 10,
+      label: 'Scala',
+      color: '#9CBABA'
+   },
+   {
+      value: 30,
+      label: 'PHP',
+      color: '#D18177'
+   },
+   {
+      value : 35,
+      label: 'HTML',
+      color: '#6AE128'
+   }
+];
+
+  var updateInterval = 5000;
+  var viewData = {};
+  var ctx = document.getElementById('chart1').getContext("2d");
+  
+  $('#chart1-title').text("Signal Strength");
+  $('#chart1-subtitle').text("in dB");
+
+  //var ctx2 = document.getElementById('chart2').getContext("2d");
+  var ctx3 = document.getElementById('chart3').getContext("2d");
+  var ctx4 = document.getElementById('chart4').getContext("2d");
+// This will get the first returned node in the jQuery collection.
+  var myNewChart = new Chart(ctx).PolarArea(data);
+  //var myNewChart2 = new Chart(ctx2).Doughnut(data);
+  var myNewChart3 = new Chart(ctx3).Line(data);
+  var myNewChart4 = new Chart(ctx4).PolarArea(data);
+  var canvas = document.getElementById('chart2'),
+    ctx2 = canvas.getContext('2d'),
+    startingData = {
+      labels: [1, 2, 3, 4, 5, 6, 7],
+      datasets: [
+          {
+              fillColor: "rgba(220,220,220,0.2)",
+              strokeColor: "rgba(220,220,220,1)",
+              pointColor: "rgba(220,220,220,1)",
+              pointStrokeColor: "#fff",
+              data: [65, 59, 80, 81, 56, 55, 40]
+          },
+          {
+              fillColor: "rgba(151,187,205,0.2)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              pointStrokeColor: "#fff",
+              data: [28, 48, 40, 19, 86, 27, 90]
+          }
+      ]
+    },
+    latestLabel = startingData.labels[6];
+
+// Reduce the animation steps for demo clarity.
+var myLiveChart = new Chart(ctx2).Line(startingData, {animationSteps: 15});
+  
+  setInterval(function(){
+  // Add two random numbers for each dataset
+  myLiveChart.addData([Math.random() * 100, Math.random() * 100], ++latestLabel);
+  // Remove the first point so we dont just add values forever
+  myLiveChart.removeData();
+}, updateInterval);
+
+function setNewInterval(num){
+  updateInterval = num*1000;
+  console.log(updateInterval);
+  return updateInterval;
+
+}
+  function switchThing(option){
+    //this
+    //$.children().removeClass();
+    $( "#overview" ).children().removeClass();
+    $( "#raspberrypi" ).children().removeClass();
+    $( "#wemo" ).children().removeClass();
+    $( "#android" ).children().removeClass();
+    $('#' + option).addClass("active");
+  }
+
+
+
+ var socket = io();
+socket.on('_post', function(datatype, data){
+  if(datatype == currentView){
+    loadData(datatype, data);
+  }
+  //otherwise we ignore the data
+  
+});
+
+socket.on('_load',function(data){
+ console.log(data);
+  $("#rpi_bluetooth").html("");
+  $("#rpi_wifi").html("");
+  $("#wemo_motion").html("");
+  $("#wemo_switch").html("");
+  $("#android_sms").html("");
+  $("#android_location").html("");
+
+  function printRPIBluetooth(element, index, array) {
+    $("#rpi_bluetooth").append(element);
+  }
+  function printRPIWifi(element, index, array) {
+    $("#rpi_wifi").append(element);
+  }
+  function printWemoMotion(element, index, array) {
+    $("#wemo_motion").append(element.device);
+  }
+  function printWemoSwitch(element, index, array) {
+    $("#wemo_switch").append(element.device);
+  }
+  function printAndroidSMS(element, index, array) {
+    $("#android_sms").append(element.device);
+  }
+  function printAndroidLocation(element, index, array) {
+    $("#android_location").append(element.device);
+  }
+
+  data.rpi_bt.forEach(printRPIBluetooth);
+  data.rpi_wifi.forEach(printRPIWifi);
+  data.wemo_switch.forEach(printWemoSwitch);
+  data.wemo_motion.forEach(printWemoMotion);
+  data.android_sms.forEach(printAndroidSMS);
+  data.android_location.forEach(printAndroidLocation);
+
+});
+
+function loadData(datatype, data){
+  switch(datatype){
+      case "RPI-WIFI":
+        //load view data with wifi related data
+        //load into graphs and table
+        //update view
+        break;
+      case "RPI-BT": 
+        //load view data with wifi related data
+        //load into graphs and table
+        //update view
+        break;
+      case "WEMO-SWITCH":  
+        //load view data with wifi related data
+        //load into graphs and table
+        //update view
+        break;
+      case "WEMO-MOTION": 
+        //load view data with wifi related data
+        //load into graphs and table
+        //update view
+        break;
+      case "ANDROID-LOCATION": 
+        //load view data with wifi related data
+        //load into graphs and table
+        //update view
+        break;
+      case "ANDROID-SMS": 
+        //load view data with wifi related data
+        //load into graphs and table
+        //update view
+        break;
+      default: break;
+  }
+  loadGraphs(datatype);
+}
 
     </script>
   </body>
