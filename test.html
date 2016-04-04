@@ -15,7 +15,6 @@
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="dashboard.css" rel="stylesheet">
   </head>
-
   <body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -48,18 +47,16 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Dashboard
-<div class="dropdown">
-  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Update Interval
-  <span class="caret"></span></button>
-  <ul class="dropdown-menu" id="choose-speed">
-    <li><a href="#">10</a></li>
-    <li><a href="#">5</a></li>
-    <li><a href="#">2</a></li>
-  </ul>
-</div>
-
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Update Interval
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu" id="choose-speed">
+              <li><a href="#">10</a></li>
+              <li><a href="#">5</a></li>
+              <li><a href="#">2</a></li>
+            </ul>
+          </div>
           </h1>
-
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
                <canvas id="chart1" width="200" height="200"></canvas>
@@ -86,9 +83,9 @@
             </div>
           </div>
 
-          <h2 class="sub-header" id = "mainTable">Raw Data</h2>
+          <h2 class="sub-header">Raw Data</h2>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="data-table">
               <thead>
                 <tr>
                   <th>#</th>
@@ -137,189 +134,7 @@
     <script src="bootstrap/js/vendor/holder.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="bootstrap/js/ie10-viewport-bug-workaround.js"></script>
-    <script>
-    /*
-    add event listeners and js from other html file
-    */
-
-  $('#choose-speed li').on('click', function(){
-    console.log($(this).text());
-    setNewInterval(new Number($(this).text()));
-
-  });
-
-    var data = [
-   {
-      value: 25,
-      label: 'Java',
-      color: '#811BD6'
-   },
-   {
-      value: 10,
-      label: 'Scala',
-      color: '#9CBABA'
-   },
-   {
-      value: 30,
-      label: 'PHP',
-      color: '#D18177'
-   },
-   {
-      value : 35,
-      label: 'HTML',
-      color: '#6AE128'
-   }
-];
-
-  var updateInterval = 5000;
-  var viewData = {};
-  var ctx = document.getElementById('chart1').getContext("2d");
-  
-  $('#chart1-title').text("Signal Strength");
-  $('#chart1-subtitle').text("in dB");
-
-  //var ctx2 = document.getElementById('chart2').getContext("2d");
-  var ctx3 = document.getElementById('chart3').getContext("2d");
-  var ctx4 = document.getElementById('chart4').getContext("2d");
-// This will get the first returned node in the jQuery collection.
-  var myNewChart = new Chart(ctx).PolarArea(data);
-  //var myNewChart2 = new Chart(ctx2).Doughnut(data);
-  var myNewChart3 = new Chart(ctx3).Line(data);
-  var myNewChart4 = new Chart(ctx4).PolarArea(data);
-  var canvas = document.getElementById('chart2'),
-    ctx2 = canvas.getContext('2d'),
-    startingData = {
-      labels: [1, 2, 3, 4, 5, 6, 7],
-      datasets: [
-          {
-              fillColor: "rgba(220,220,220,0.2)",
-              strokeColor: "rgba(220,220,220,1)",
-              pointColor: "rgba(220,220,220,1)",
-              pointStrokeColor: "#fff",
-              data: [65, 59, 80, 81, 56, 55, 40]
-          },
-          {
-              fillColor: "rgba(151,187,205,0.2)",
-              strokeColor: "rgba(151,187,205,1)",
-              pointColor: "rgba(151,187,205,1)",
-              pointStrokeColor: "#fff",
-              data: [28, 48, 40, 19, 86, 27, 90]
-          }
-      ]
-    },
-    latestLabel = startingData.labels[6];
-
-// Reduce the animation steps for demo clarity.
-var myLiveChart = new Chart(ctx2).Line(startingData, {animationSteps: 15});
-  
-  setInterval(function(){
-  // Add two random numbers for each dataset
-  myLiveChart.addData([Math.random() * 100, Math.random() * 100], ++latestLabel);
-  // Remove the first point so we dont just add values forever
-  myLiveChart.removeData();
-}, updateInterval);
-
-function setNewInterval(num){
-  updateInterval = num*1000;
-  console.log(updateInterval);
-  return updateInterval;
-
-}
-  function switchThing(option){
-    //this
-    //$.children().removeClass();
-    $( "#overview" ).children().removeClass();
-    $( "#raspberrypi" ).children().removeClass();
-    $( "#wemo" ).children().removeClass();
-    $( "#android" ).children().removeClass();
-    $('#' + option).addClass("active");
-  }
-
-
-
- var socket = io();
-socket.on('_post', function(datatype, data){
-  if(datatype == currentView){
-    loadData(datatype, data);
-  }
-  //otherwise we ignore the data
-  
-});
-
-socket.on('_load',function(data){
- console.log(data);
-  $("#rpi_bluetooth").html("");
-  $("#rpi_wifi").html("");
-  $("#wemo_motion").html("");
-  $("#wemo_switch").html("");
-  $("#android_sms").html("");
-  $("#android_location").html("");
-
-  function printRPIBluetooth(element, index, array) {
-    $("#rpi_bluetooth").append(element);
-  }
-  function printRPIWifi(element, index, array) {
-    $("#rpi_wifi").append(element);
-  }
-  function printWemoMotion(element, index, array) {
-    $("#wemo_motion").append(element.device);
-  }
-  function printWemoSwitch(element, index, array) {
-    $("#wemo_switch").append(element.device);
-  }
-  function printAndroidSMS(element, index, array) {
-    $("#android_sms").append(element.device);
-  }
-  function printAndroidLocation(element, index, array) {
-    $("#android_location").append(element.device);
-  }
-
-  data.rpi_bt.forEach(printRPIBluetooth);
-  data.rpi_wifi.forEach(printRPIWifi);
-  data.wemo_switch.forEach(printWemoSwitch);
-  data.wemo_motion.forEach(printWemoMotion);
-  data.android_sms.forEach(printAndroidSMS);
-  data.android_location.forEach(printAndroidLocation);
-
-});
-
-function loadData(datatype, data){
-  switch(datatype){
-      case "RPI-WIFI":
-        //load view data with wifi related data
-        //load into graphs and table
-        //update view
-        break;
-      case "RPI-BT": 
-        //load view data with wifi related data
-        //load into graphs and table
-        //update view
-        break;
-      case "WEMO-SWITCH":  
-        //load view data with wifi related data
-        //load into graphs and table
-        //update view
-        break;
-      case "WEMO-MOTION": 
-        //load view data with wifi related data
-        //load into graphs and table
-        //update view
-        break;
-      case "ANDROID-LOCATION": 
-        //load view data with wifi related data
-        //load into graphs and table
-        //update view
-        break;
-      case "ANDROID-SMS": 
-        //load view data with wifi related data
-        //load into graphs and table
-        //update view
-        break;
-      default: break;
-  }
-  loadGraphs(datatype);
-}
-
-    </script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="graphs.js"></script>
   </body>
 </html>
