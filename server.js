@@ -53,7 +53,7 @@ function handler (req, res) {
 io.on('connection', function (socket) {
   console.log("Connected");
   socket.emit('_load', packageEvents());
-  });
+});
 
 console.log('Listening...');
 
@@ -65,6 +65,5 @@ function packageEvents(){
   events.wemo_motion = wemo_motion;
   events.android_location = android_location;
   events.android_sms = android_sms;
-
   return events;
 }

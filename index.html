@@ -7,7 +7,7 @@
   <link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css" rel="stylesheet">
   <style type="text/css">
       body {
-        background-color: black;
+        
         color: grey;
       }
 
@@ -54,6 +54,10 @@
               <h2>Android Location</h2>
               <p id = "android_location"></p>
             </div><!--/span-->
+            <div class="span4">
+              <h2>Canvas</h2>
+              <canvas id="myChart" width="400" height="400"></canvas>
+            </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
       </div><!--/row-->
@@ -76,6 +80,7 @@
   <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-collapse.js"></script>
   <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js"></script>
   <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-typeahead.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.0/Chart.min.js"></script>
   <script> 
   var socket = io();
 socket.on('_post', function(data){
@@ -134,7 +139,7 @@ socket.on('_post_android_network',function(data){
 });
 
 socket.on('_load',function(data){
-  console.log(data);
+ console.log(data);
   $("#rpi_bluetooth").html("");
   $("#rpi_wifi").html("");
   $("#wemo_motion").html("");
@@ -168,8 +173,42 @@ socket.on('_load',function(data){
   data.android_sms.forEach(printAndroidSMS);
   data.android_location.forEach(printAndroidLocation);
 
-  
 });
+
+var data = [
+   {
+      value: 25,
+      label: 'Java',
+      color: '#811BD6'
+   },
+   {
+      value: 10,
+      label: 'Scala',
+      color: '#9CBABA'
+   },
+   {
+      value: 30,
+      label: 'PHP',
+      color: '#D18177'
+   },
+   {
+      value : 35,
+      label: 'HTML',
+      color: '#6AE128'
+   }
+];
+
+
+
+
+
+
+  var ctx = document.getElementById('myChart').getContext("2d");
+// This will get the first returned node in the jQuery collection.
+  var myNewChart = new Chart(ctx).PolarArea(data);
+  console.log(myNewChart);
+
+
 
 
 
