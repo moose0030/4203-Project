@@ -36,7 +36,7 @@ function handler (req, res) {
 
     req.on('end', function () {
         var json = body, obj = JSON.parse(json);  
-    
+        console.log(obj);
         switch(obj.type){
             case "RPI-WIFI":console.log(obj.type);io.emit('_post_rpi_wifi',obj); rpi_wifi.push(body); break;
             case "RPI-BT": console.log(obj.type);io.emit('_post_rpi_bluetooth',obj); rpi_bt.push(body); break;
