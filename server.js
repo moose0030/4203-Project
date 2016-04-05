@@ -37,14 +37,15 @@ function handler (req, res) {
     req.on('end', function () {
         var json = body, obj = JSON.parse(json);  
         console.log(obj);
+        io.emit('_post',obj.type,obj);
+        io.emit('_post',body);
         switch(obj.type){
-            case "RPI-WIFI":console.log(obj.type);io.emit('_post_rpi_wifi',obj); rpi_wifi.push(body); break;
-            case "RPI-BT": console.log(obj.type);io.emit('_post_rpi_bluetooth',obj); rpi_bt.push(body); break;
-            case "WEMO-SWITCH": console.log(obj.type);io.emit('_post_wemo_switch',obj); wemo_switch.push(body); break;
-            case "WEMO-MOTION":console.log(obj.type);io.emit('_post_wemo_motion',obj); wemo_motion.push(body); break;
-            case "ANDROID-LOCATION":console.log(obj.type);io.emit('_post_android_location',obj); android_location.push(body); break;
-            case "ANDROID-SMS":console.log(obj.type);io.emit('_post_android_sms',obj); android_sms.push(body); break;
-            default:  console.log(obj.type);io.emit('_post',body);
+            case "RPI-WIFI":rpi_wifi.push(obj); break;
+            case "RPI-BT": rpi_bt.push(obj); break;
+            case "WEMO-SWITCH": wemo_switch.push(obj); break;
+            case "WEMO-MOTION": wemo_motion.push(obj); break;
+            case "ANDROID-LOCATION": android_location.push(obj); break;
+            case "ANDROID-SMS":android_sms.push(obj); break;
         }
     });
   }
