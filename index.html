@@ -35,8 +35,8 @@
       <div class="row">
         <div class="col-sm-4 col-md-2 sidebar">
           <ul class="nav nav-sidebar" id="raspberrypi"<a> Raspberry Pi</a>
-            <li id="rpi-wifi"><a onClick="switchThing('rpi-wifi')">Wi-Fi</a></li>
-            <li id="rpi-bt"><a onClick="switchThing('rpi-bt')">Bluetooth</a></li>
+            <li id="RPI-WIFI"><a onClick="switchThing('RPI-WIFI')">Wi-Fi</a></li>
+            <li id="RPI-BT"><a onClick="switchThing('RPI-BT')">Bluetooth</a></li>
           </ul>
           <ul class="nav nav-sidebar" id="wemo"<a> WEMO </a>
             <li class="" id="wemo-switch"><a onClick="switchThing('wemo-switch')">Switch</a></li>
@@ -321,7 +321,7 @@ var smsData = [];
 var loactionData = [];
 
 var updateInterval = 1000;
-var currentView = "rpi-wifi";
+var currentView = "RPI-WIFI";
 
 var ch1= new Chart(chart1).PolarArea(data);
 var ch2 = new Chart(chart2).Bar(data2);
@@ -334,11 +334,10 @@ $('#choose-speed li').on('click', function(){
 });
 
 var socket = io();
-  socket.on('_post', function(datatype, data){
+  socket.on('_post', function(data){
     console.log(data);
-    console.log(datatype);
-    if(datatype == currentView){
-      loadData(datatype, data);
+    if(data.type == currentView){
+      loadData(data);
     }
     else{
       notifyIcon();
@@ -371,15 +370,14 @@ function switchThing(option){
     //loadBluetoothTable();
   }
 
-function loadData(datatype, data){
+function loadData(data){
   /*if($.isEmptyObject(data)){
-    //alert("We don't have any data of that kind: " + datatype);
     console.log("Empty data object");
     return;
   }*/
-    console.log(datatype);
-  switch(datatype){
-    case "rpi-wifi":      
+    console.log(data.type);
+  switch(data.type){
+    case "RPI-WIFI":      
         //data.rpi_wifi.forEach(iterateWifi);
         $.each(data.devices, function(){
     
