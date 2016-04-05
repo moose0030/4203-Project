@@ -274,7 +274,7 @@ function accessPoint(ap) {
     console.log(this);
 }
 
-function bluetoothDevive(bd){
+function bluetoothDevice(bd){
   this.name = bd.name;
   this.address = bd.address;
 }
@@ -369,7 +369,6 @@ function switchThing(option){
     $( "#android" ).children().removeClass();
     $('#' + option).addClass("active");
     currentView = option;
-    loadData(option,0);
 
     //loadBluetoothTable();
   }
@@ -397,9 +396,15 @@ function loadData(data){
         //load into graphs and table
         //update view
         break;
-        case "rpi-bt": 
+        case "RPI-BT": 
         //load view data with wifi related data
         //data.rpi_bt.forEach(iterateBluetooth);
+            $.each(data.devices, function(){
+    
+        var a = new bluetoothDevice(JSON.parse(this));
+        bluetoothData.push(a);
+
+        });
         loadBluetoothTable();
         setChartData("","","","");
         $('#table-title').text("Bluetooth Data");
@@ -450,7 +455,7 @@ function loadData(data){
   }
 
   function iterateBluetooth(element, index, array) {
-    var bd = new bluetoothDevive(element);
+    var bd = new bluetoothDevice(element);
     bluetoothData.push(bd);
     console.log(bd);
   }
@@ -494,7 +499,7 @@ function loadData(data){
     $('#head-table tr').append('<td>Address</td>')
 
      var rows = "";
-    $.each(testJson2.json.devices, function(){
+    $.each(bluetoothData, function(){
     console.log(this);
     rows += "<tr><td>" + this.name + "</td><td>" +  this.address + "</td></tr>";
     });
