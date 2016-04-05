@@ -336,8 +336,10 @@ $('#choose-speed li').on('click', function(){
 var socket = io();
   socket.on('_post', function(data){
     console.log(data);
+
     var obj = data;
-    console.log(obj.type + "<---obj   ------>" + currentView);
+    console.log(obj);
+    console.log(obj.type + "<---obj   currentView---->" + currentView);
     if(obj.type == currentView){
       loadData(obj);
     }
