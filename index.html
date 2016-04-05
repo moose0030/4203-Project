@@ -98,7 +98,26 @@
     <script src="bootstrap/js/ie10-viewport-bug-workaround.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script>
+
+
 ///////////////////     EXAMPLE DATA        //////////////////////
+
+var wifiData = [];
+var bluetoothData = [];
+var actualWifi =
+  {"type": "RPI-WIFI", "devices": ["{\"signal\": -39, \"ssid\": \"Extend 2.4\", \"channel\": 11, \"address\": \"00:90:A9:AD:CA:3B\"}", "{\"signal\": -83, \"ssid\": \"BELL050\", \"channel\": 11, \"address\": \"D8:6C:E9:2A:66:CD\"}", "{\"signal\": -89, \"ssid\": \"Promised LAN\", \"channel\": 4, \"address\": \"00:23:6A:46:E7:99\"}", "{\"signal\": -75, \"ssid\": \"Hosanna\", \"channel\": 1, \"address\": \"78:8D:F7:4E:AA:A8\"}", "{\"signal\": -71, \"ssid\": \"HP-Print-CD-Deskjet 3510 series\", \"channel\": 6, \"address\": \"74:46:A0:6B:45:CD\"}", "{\"signal\": -77, \"ssid\": \"BELL1030\", \"channel\": 6, \"address\": \"00:25:3C:F3:71:41\"}", "{\"signal\": -59, \"ssid\": \"Basement\", \"channel\": 11, \"address\": \"00:FC:8D:06:AD:58\"}"]};
+  console.log(actualWifi);
+
+/*  $.each(actualWifi.devices, function(){
+    
+    var a = new accessPoint(JSON.parse(this));
+    wifiData.push(a);
+
+    });
+*/
+
+
+
 var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4'];
 var colours2= ['#EBB802','#4DCD01','#D70133','#2617A3'];
 var data = [
@@ -249,10 +268,10 @@ var testJson6 = {
 
 function accessPoint(ap) {
     this.signal = new Number(ap.signal);
-    console.log(this.signal);
     this.ssid = ap.ssid;
     this.channel = ap.channel;
     this.address = ap.address;
+    console.log(this);
 }
 
 function bluetoothDevive(bd){
@@ -291,8 +310,9 @@ var chart2 = document.getElementById('chart2').getContext("2d");
 var table = document.getElementById('data-table');
 
 //////////////////         DATA          /////////////////////////
-var wifiData = [];
-var bluetoothData = [];
+
+//wifiData
+//bluetoothData
 
 var switchData = [];
 var motionData = [];
@@ -361,6 +381,13 @@ function loadData(datatype, data){
   switch(datatype){
     case "rpi-wifi":      
         //data.rpi_wifi.forEach(iterateWifi);
+        $.each(data.devices, function(){
+    
+        var a = new accessPoint(JSON.parse(this));
+        wifiData.push(a);
+
+        });
+
         loadWifiTable();
         setChartData("Signal Strength","Channels","Measured in dB","Number of Access Points/Channel");
         $('#table-title').text("Wi-Fi Data");
@@ -447,7 +474,7 @@ function loadData(datatype, data){
     $('#head-table tr').append('<td>Address</td>')
   
     var rows = "";
-    $.each(testJson.json.devices, function(){
+    $.each(wifiData, function(){
     console.log(this);
     rows += "<tr><td>" + this.ssid + "</td><td>" + this.signal + "</td><td>" + this.channel + "</td><td>" + this.address + "</td></tr>";
     });

@@ -40,12 +40,12 @@ function handler (req, res) {
         io.emit('_post',obj.type,obj);
         io.emit('_post',body);
         switch(obj.type){
-            case "RPI-WIFI":rpi_wifi.push(obj); break;
-            case "RPI-BT": rpi_bt.push(obj); break;
-            case "WEMO-SWITCH": wemo_switch.push(obj); break;
-            case "WEMO-MOTION": wemo_motion.push(obj); break;
-            case "ANDROID-LOCATION": android_location.push(obj); break;
-            case "ANDROID-SMS":android_sms.push(obj); break;
+            case "rpi-wifi":rpi_wifi.push(obj); break;
+            case "rpi-bt": rpi_bt.push(obj); break;
+            case "wemo-switch": wemo_switch.push(obj); break;
+            case "wemo-motion": wemo_motion.push(obj); break;
+            case "android-location": android_location.push(obj); break;
+            case "android-sms":android_sms.push(obj); break;
         }
     });
   }
