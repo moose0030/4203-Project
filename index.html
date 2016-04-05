@@ -336,8 +336,9 @@ $('#choose-speed li').on('click', function(){
 var socket = io();
   socket.on('_post', function(data){
     console.log(data);
-    if(data.type == currentView){
-      loadData(data);
+    var obj = data;
+    if(obj.type == currentView){
+      loadData(obj);
     }
     else{
       notifyIcon();
