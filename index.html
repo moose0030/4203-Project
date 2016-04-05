@@ -382,6 +382,7 @@ function loadData(data){
   switch(data.type){
     case "RPI-WIFI":      
         //data.rpi_wifi.forEach(iterateWifi);
+        wifiData.length = 0;
         $.each(data.devices, function(){
     
         var a = new accessPoint(JSON.parse(this));
@@ -399,8 +400,9 @@ function loadData(data){
         case "RPI-BT": 
         //load view data with wifi related data
         //data.rpi_bt.forEach(iterateBluetooth);
+        bluetoothData.length = 0;
             $.each(data.devices, function(){
-    
+        
         var a = new bluetoothDevice(JSON.parse(this));
         bluetoothData.push(a);
 
