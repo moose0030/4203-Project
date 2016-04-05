@@ -51,8 +51,10 @@ function handler (req, res) {
 }
 
 io.on('connection', function (socket) {
-  console.log("Connected");
-  socket.emit('_load', packageEvents());
+  
+  io.emit("_post","bb",{name:"hi"});
+  
+  //socket.emit('_load', packageEvents());
 });
 
 console.log('Listening...');

@@ -1,103 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="bootstrap/favicon.ico">
-
-    <title>Analysis of Things</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="dashboard.css" rel="stylesheet">
-  </head>
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Analysis of Things</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a id="notification" onClick="refreshData()">Data is up to date.</a></li>
-          </ul>
-        </div>
-      </div>
-      
-    </nav>
-
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-4 col-md-2 sidebar">
-          <ul class="nav nav-sidebar" id="raspberrypi"<a> Raspberry Pi</a>
-            <li id="rpi-wifi"><a onClick="switchThing('rpi-wifi')">Wi-Fi</a></li>
-            <li id="rpi-bt"><a onClick="switchThing('rpi-bt')">Bluetooth</a></li>
-          </ul>
-          <ul class="nav nav-sidebar" id="wemo"<a> WEMO </a>
-            <li class="" id="wemo-switch"><a onClick="switchThing('wemo-switch')">Switch</a></li>
-            <li class ="" id="wemo-motion"><a onClick="switchThing('wemo-motion')">Motion</a></li>
-          </ul>
-          <ul class="nav nav-sidebar" id="android"<a> Android </a>
-            <li id="android-sms"><a onClick="switchThing('android-sms')">SMS</a></li>
-            <li id="android-location"><a onClick="switchThing('android-location')">Location</a></li>
-          </ul>
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Update Interval
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu" id="choose-speed">
-              <li><a href="#">10</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">2</a></li>
-            </ul>
-          </div>
-          </h1>
-          <div class="row placeholders">
-            <div class="col-xs-6 placeholder">
-               <canvas id="chart1" width="400" height="400"></canvas>
-              <h4 id ="chart1-title">Label</h4>
-              <span class="text-muted" id="chart1-desc">Something else</span>
-            </div>
-            <div class="col-xs-6 placeholder">
-             <canvas id="chart2" width="400" height="400"></canvas>
-              <h4 id ="chart2-title">Label</h4>
-              <span class="text-muted" id="chart2-desc">Something else</span>
-            </div>
-          </div>
-          <h2 class="sub-header" id="table-title">Raw Data</h2>
-          <div class="table-responsive">
-            <table class="table table-striped" id="data-table">
-              <thead id="head-table">
-                <tr>
-                </tr>
-              </thead>
-              <tbody id="body-table">
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.0/Chart.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script src="bootstrap/js/vendor/holder.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap/js/ie10-viewport-bug-workaround.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script>
 ///////////////////     EXAMPLE DATA        //////////////////////
 var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4'];
 var colours2= ['#EBB802','#4DCD01','#D70133','#2617A3'];
@@ -301,7 +201,6 @@ var smsData = [];
 var loactionData = [];
 
 var updateInterval = 1000;
-var currentView = "rpi-wifi";
 
 var ch1= new Chart(chart1).PolarArea(data);
 var ch2 = new Chart(chart2).Bar(data2);
@@ -314,21 +213,16 @@ $('#choose-speed li').on('click', function(){
 });
 
 var socket = io();
-  socket.on('_post', function(datatype, data){
-    console.log(data);
-    console.log(datatype);
+  /*socket.on('_post', function(datatype, data){
     if(datatype == currentView){
       loadData(datatype, data);
-    }
-    else{
-      notifyIcon();
     }
   });
 
   socket.on('_load', function(data){
     
   });
-
+*/
 ///////////////////       FUNCTIONS         //////////////////////
 
 /*var myFunction = function(){
@@ -345,7 +239,6 @@ function switchThing(option){
     $( "#wemo" ).children().removeClass();
     $( "#android" ).children().removeClass();
     $('#' + option).addClass("active");
-    currentView = option;
     loadData(option,0);
 
     //loadBluetoothTable();
@@ -549,31 +442,3 @@ function loadData(datatype, data){
     ch1 = new Chart(chart1).Pie(data);
     ch2 = new Chart(chart2).Line(data2);
   }
-
-  function notifyIcon(){
-    $('#notification').html('New Data!');
-    console.log("it worked");
-  }
-
-  function refreshData(){
-    
-    $('#notification').html('Data is up to date.');
-  }
-
-  function refreshCurrentData(){
-    console.log("refresh");
-    switch(currentView){
-      case 'rpi-wifi':break;
-      case 'rpi-bt':break;
-      case 'wemo-switch':break;
-      case 'wemo-motion':break;
-      case 'android-sms':break;
-      case 'android-location':break;
-      default:break;
-    }
-  }
-
-
-    </script>
-  </body>
-</html>

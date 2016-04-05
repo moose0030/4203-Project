@@ -22,16 +22,18 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Analysis of Things</a>
         </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">No new data</a></li>
+          </ul>
+        </div>
       </div>
+      
     </nav>
 
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-4 col-md-2 sidebar">
-          <ul class="nav nav-sidebar" id="overview"<a href="" >Overview</a>
-            <li id="graphs"><a onClick="switchThing('graphs')">All Graphs</a></li>
-            <li id="live-feed"><a onClick="switchThing('live-feed')">Live Feed</a></li>
-          </ul>
           <ul class="nav nav-sidebar" id="raspberrypi"<a> Raspberry Pi</a>
             <li id="rpi-wifi"><a onClick="switchThing('rpi-wifi')">Wi-Fi</a></li>
             <li id="rpi-bt"><a onClick="switchThing('rpi-bt')">Bluetooth</a></li>
@@ -58,32 +60,18 @@
           </div>
           </h1>
           <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-               <canvas id="chart1" width="200" height="200"></canvas>
+            <div class="col-xs-6 placeholder">
+               <canvas id="chart1" width="400" height="400"></canvas>
               <h4 id ="chart1-title">Label</h4>
-              <span class="text-muted" id="chart1-subtitle">Something else</span>
+              <span class="text-muted" id="chart1-desc">Something else</span>
             </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-             <canvas id="chart2" width="200" height="200"></canvas>
+            <div class="col-xs-6 placeholder">
+             <canvas id="chart2" width="400" height="400"></canvas>
               <h4 id ="chart2-title">Label</h4>
-              <span class="text-muted">Something else</span>
+              <span class="text-muted" id="chart2-desc">Something else</span>
             </div>
           </div>
-
-          <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <canvas id="chart3" width="200" height="200"></canvas>
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-             <canvas id="chart4" width="200" height="200"></canvas>
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-          </div>
-
-          <h2 class="sub-header">Raw Data</h2>
+          <h2 class="sub-header" id="table-title">Raw Data</h2>
           <div class="table-responsive">
             <table class="table table-striped" id="data-table">
               <thead id="head-table">
