@@ -337,6 +337,7 @@ var socket = io();
   socket.on('_post', function(data){
     console.log(data);
     var obj = data;
+    console.log(obj.type + "<---obj   ------>" + currentView);
     if(obj.type == currentView){
       loadData(obj);
     }
