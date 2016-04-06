@@ -13,7 +13,113 @@
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="dashboard.css" rel="stylesheet">
+    <style>
+    /*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+  border: 0;
+}
+
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+    </style>
   </head>
   <body>
 
@@ -106,167 +212,10 @@ var wifiData = [];
 var bluetoothData = [];
 var leftGraphData = [];
 var rightGraphData;
-var actualWifi =
-  {"type": "RPI-WIFI", "devices": ["{\"signal\": -39, \"ssid\": \"Extend 2.4\", \"channel\": 11, \"address\": \"00:90:A9:AD:CA:3B\"}", "{\"signal\": -83, \"ssid\": \"BELL050\", \"channel\": 11, \"address\": \"D8:6C:E9:2A:66:CD\"}", "{\"signal\": -89, \"ssid\": \"Promised LAN\", \"channel\": 4, \"address\": \"00:23:6A:46:E7:99\"}", "{\"signal\": -75, \"ssid\": \"Hosanna\", \"channel\": 1, \"address\": \"78:8D:F7:4E:AA:A8\"}", "{\"signal\": -71, \"ssid\": \"HP-Print-CD-Deskjet 3510 series\", \"channel\": 6, \"address\": \"74:46:A0:6B:45:CD\"}", "{\"signal\": -77, \"ssid\": \"BELL1030\", \"channel\": 6, \"address\": \"00:25:3C:F3:71:41\"}", "{\"signal\": -59, \"ssid\": \"Basement\", \"channel\": 11, \"address\": \"00:FC:8D:06:AD:58\"}"]};
-  console.log(actualWifi);
-
-/*  $.each(actualWifi.devices, function(){
-    
-    var a = new accessPoint(JSON.parse(this));
-    wifiData.push(a);
-
-    });
-*/
-
-
 
 var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4'];
 var colours2= ['#EBB802','#4DCD01','#D70133','#2617A3'];
-var data = [
-    {
-      value: 25,
-      label: 'Java',
-      color: colours[0]
-    },
-    {
-      value: 10,
-      label: 'Scala',
-      color: colours[1]
-    },
-    {
-      value: 30,
-      label: 'PHP',
-      color: colours[2]
-    },
-    {
-      value : 35,
-      label: 'HTML',
-      color: colours[3]
-    },
-    {
-      value : 35,
-      label: 'HTML',
-      color: colours2[0]
-    },{
-      value : 35,
-      label: 'HTML',
-      color: colours2[1]
-    }
-    ];
-var wifiTestData=[
-{
-      value: 0.017,
-      label: 'Basement',
-      color: colours[0]
-    },
-    {
-      value: 0.022,
-      label: 'Extend2.4',
-      color: colours[1]
-    },
-    {
-      value: 0.012,
-      label: 'Bell050',
-      color: colours[2]
-    }
-];
- 
-var wifiTestData2 = {
-    labels: ["11"],
-    datasets: [
-        {
-            label: "Channels",
-            fillColor: "rgba(85, 228, 241,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
-            highlightFill: "rgba(0, 218, 238,0.75)",
-            highlightStroke: "rgba(220,220,220,1)",
-            data: [3]
-        }
-    ]
-};
 
-var data2 = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-        {
-            label: "My First dataset",
-            fillColor: "rgba(85, 228, 241,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
-            highlightFill: "rgba(0, 218, 238,0.75)",
-            highlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
-        }
-    ]
-};
-
-var testJson = {
-  json: {
-    devices: [
-      {signal : "-59", ssid: "Basement", channel: "11", address: "00:FC:8D:06:AD:58"}, 
-      {signal : "-45", ssid: "Extend 2.4", channel: "11", address: "00:90:A9:AD:CA:3B"}, 
-      {signal : "-87", ssid: "BELL050", channel: "11", address: "D8:6C:E9:2A:66:CD"}
-    ], 
-    type: "RPI-WIFI"
-  }, 
-  origin: "99.246.104.179", 
-  url: "http://httpbin.org/post"
-}
-
-var testJson2 = {
-  json: {
-    devices: [
-      {name: "G4", address: "78:F8:82:4A:24:69"},
-      {name: "G4", address: "78:F8:82:4A:24:69"},
-      {name: "G4", address: "78:F8:82:4A:24:69"},
-      {name: "G4", address: "78:F8:82:4A:24:69"},
-      {name: "G4", address: "78:F8:82:4A:24:69"}
-    ]
-  }
-}
-
-var testJson3 = {
-  json:{
-    devices:[
-      {type : "WEMO-MOTION", status : "Just sensed motion"},
-      {type : "WEMO-MOTION", status : "Just sensed motion"},
-      {type : "WEMO-MOTION", status : "Just sensed motion"},
-      {type : "WEMO-MOTION", status : "Just sensed motion"}
-    ]
-  }
-}
-
-var testJson4 = {
-  json:{
-    devices:[   
-      {type : "WEMO-SWITCH", mode : "on"},
-      {type : "WEMO-SWITCH", mode : "on"},
-      {type : "WEMO-SWITCH", mode : "on"},
-      {type : "WEMO-SWITCH", mode : "on"}
-    ]
-  }
-}
-
-var testJson5 = {
-  json:{
-    devices:[   
-      {type : "ANDROID-LOCATION", location : "Home"},
-      {type : "ANDROID-LOCATION", location : "Home"},
-      {type : "ANDROID-LOCATION", location : "Home"},
-      {type : "ANDROID-LOCATION", location : "Home"},
-    ]
-  }
-}
-
-var testJson6 = {
-  json:{
-    devices:[   
-      {type : "ANDROID-SMS", from : "Garrett Duff"},
-      {type : "ANDROID-SMS", from : "Garrett Duff"},
-      {type : "ANDROID-SMS", from : "Garrett Duff"},
-      {type : "ANDROID-SMS", from : "Garrett Duff"},
-    ]
-  }
-}
 
 function accessPoint(ap) {
     this.signal = new Number(ap.signal);
@@ -441,7 +390,6 @@ function loadData(data){
 
         });
         loadBluetoothTable();
-        setChartData("","","","");
         $('#table-title').text("Bluetooth Data");
         //load into graphs and table
         //update view
@@ -649,13 +597,6 @@ function loadData(data){
       default:break;
     }
   }
-
-  function buildWifiGraph(){
-
-
-  }
-
-
     </script>
   </body>
 </html>
