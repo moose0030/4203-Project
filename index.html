@@ -210,6 +210,7 @@ body {
 
 var wifiData = [];
 var bluetoothData = [];
+var switchData=[];
 var leftGraphData = [];
 var rightGraphData;
 
@@ -371,7 +372,7 @@ var table = document.getElementById('data-table');
 //wifiData
 //bluetoothData
 
-var switchData = [];
+//var switchData = [];
 var motionData = [];
 
 var smsData = [];
@@ -470,7 +471,15 @@ function loadData(data){
         //load into graphs and table
         //update view
         break;
-        case "wemo-switch":  
+        case "WEMO-SWITCH":
+        var a = new wemoSwitch(JSON.parse(data));
+        if(switchData.length<10)
+          switchData.push(a);
+        else{
+          switchData.pop();
+          switchData.push(a);
+        }
+
         //load view data with wifi related data
         loadSwitchTable();
         setChartData("Popular Events","Popular Time","Most Frequent Events","Most Frequent Periods of Time");
@@ -584,15 +593,24 @@ function loadData(data){
     $('#head-table tr').append('<td>Mode</td>')
 
      var rows = "";
-    $.each(testJson4.json.devices, function(){
+     var on = 0;
+     var off = 0;
+    $.each(switchData, function(){
     console.log(this);
+    if(this.mode == 'on')
+      on++;
+    if(this.mode == 'off')
+      off++;
     rows += "<tr><td>" + this.type + "</td><td>" +  this.mode + "</td></tr>";
     });
+
+    leftGraphData.push(on,"on",colours[0]);
+    leftGraphData.push(off,"off",colours[1]);
 
     $( rows ).appendTo( "#body-table" );
     ch1.destroy();
     ch2.destroy();
-    ch1 = new Chart(chart1).Pie(data);
+    ch1 = new Chart(chart1).Pie(leftGraphData);
     ch2 = new Chart(chart2).Line(data2);
 
   }
