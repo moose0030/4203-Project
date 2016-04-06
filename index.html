@@ -472,7 +472,7 @@ function loadData(data){
         //update view
         break;
         case "WEMO-SWITCH":
-        var a = new wemoSwitch(JSON.parse(data));
+        var a = new wemoSwitch(data);
         if(switchData.length<10)
           switchData.push(a);
         else{
