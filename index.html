@@ -604,8 +604,8 @@ function loadData(data){
     rows += "<tr><td>" + this.type + "</td><td>" +  this.mode + "</td></tr>";
     });
 
-    leftGraphData.push(on,"on",colours[0]);
-    leftGraphData.push(off,"off",colours[1]);
+    leftGraphData.push(new simpleData(on,"on",colours[0]));
+    leftGraphData.push(new simpleData(off,"off",colours[1]));
 
     $( rows ).appendTo( "#body-table" );
     ch1.destroy();
