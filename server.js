@@ -52,9 +52,7 @@ function handler (req, res) {
 }
 
 io.on('connection', function (socket) {
-  
-  io.emit("_post","bb",{name:"hi"});
-  
+
   //socket.emit('_load', packageEvents());
 });
 

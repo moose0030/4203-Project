@@ -398,12 +398,12 @@ var socket = io();
     var obj = data;//JSON.parse(data);
     console.log(obj);
     console.log(obj.type + "<---obj   currentView---->" + currentView);
-    if(obj.type == currentView){
+    //if(obj.type == currentView){
       loadData(obj);
-    }
+    /*}
     else{
       notifyIcon();
-    }
+    }*/
   });
 
   socket.on('_load', function(data){
@@ -427,8 +427,12 @@ function switchThing(option){
     $( "#android" ).children().removeClass();
     $('#' + option).addClass("active");
     currentView = option;
-
-    //loadBluetoothTable();
+    switch(option){
+      case 'RPI-WIFI':loadWifiTable();break;
+      case 'RPI-BT':loadBluetoothTable();break;
+      case 'WEMO-SWITCH':loadSwitchTable();break;
+      case 'ANDROID-SMS':loadSMSTable();break;
+    }
   }
 
 function loadData(data){
@@ -447,10 +451,11 @@ function loadData(data){
         wifiData.push(a);
 
         });
-
+        if(data.type == currentView){
         loadWifiTable();
         setChartData("Signal Strength","Channels","Measured in dB","Number of Access Points/Channel");
         $('#table-title').text("Wi-Fi Data");
+      }
         //load view data with wifi related data
         //load into graphs and table
         //update view
@@ -465,9 +470,11 @@ function loadData(data){
         bluetoothData.push(a);
 
         });
+        if(data.type == currentView){
         loadBluetoothTable();
         setChartData("","","","");
         $('#table-title').text("Bluetooth Data");
+      }
         //load into graphs and table
         //update view
         break;
@@ -481,34 +488,48 @@ function loadData(data){
         }
 
         //load view data with wifi related data
+        if(data.type == currentView){
         loadSwitchTable();
         setChartData("Popular Events","Popular Time","Most Frequent Events","Most Frequent Periods of Time");
         $('#table-title').text("WeMo Switch Data");
+      }
         //load into graphs and table
         //update view
         break;
         case "wemo-motion": 
         //load view data with wifi related data
+        if(data.type == currentView){
         loadMotionTable();
         setChartData("Popular Events","Popular Time","Most Frequent Events","Most Frequent Periods of Time");
         $('#table-title').text("WeMo Motion Data");
+      }
         //load into graphs and table
         //update view
         break;
         case "android-location": 
         //load view data with wifi related data
+        if(data.type == currentView){
         loadLocationTable();
         setChartData("Popular Locations","Popular Time","Most Frequent Locations","Most Frequent Periods of Time");
         $('#table-title').text("Android Location Data");
+      }
         //load into graphs and table
         //update view
         break;
-        case "android-sms": 
+        case "ANDROID-SMS": 
+        var a = new androidSMS(data);
+        if(smsData.length<10)
+          smsData.push(a);
+        else{
+          smsData.pop();
+          smsData.push(a);
+        }
         //load view data with wifi related data
+        if(data.type == currentView){
         loadSMSTable();
-        loadChartData()
         setChartData("Popular People","Popular Time","Most Frequent People","Most Frequent Periods of Time");
         $('#table-title').text("Android SMS Data");
+      }
         //load into graphs and table
         //update view
         break;
@@ -516,17 +537,7 @@ function loadData(data){
       }
     }
  
-  function iterateWifi(element, index, array) {
-    var ap = new accessPoint(element);
-    wifiData.push(ap);
-    console.log(ap);
-  }
 
-  function iterateBluetooth(element, index, array) {
-    var bd = new bluetoothDevice(element);
-    bluetoothData.push(bd);
-    console.log(bd);
-  }
 
   function setChartData(title1,title2,desc1,desc2){
     $('#chart1-desc').text(desc1);
@@ -595,6 +606,7 @@ function loadData(data){
      var rows = "";
      var on = 0;
      var off = 0;
+     leftGraphData.length = 0;
     $.each(switchData, function(){
     console.log(this);
     if(this.mode == 'on')
@@ -639,7 +651,7 @@ function loadData(data){
     $('#head-table tr').append('<td>From</td>')
 
      var rows = "";
-    $.each(testJson6.json.devices, function(){
+    $.each(smsData, function(){
     console.log(this);
     rows += "<tr><td>" + this.type + "</td><td>" +  this.from + "</td></tr>";
     });
