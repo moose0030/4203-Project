@@ -215,7 +215,82 @@ var rightGraphData;
 
 var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4'];
 var colours2= ['#EBB802','#4DCD01','#D70133','#2617A3'];
+var data = [
+    {
+      value: 25,
+      label: 'Java',
+      color: colours[0]
+    },
+    {
+      value: 10,
+      label: 'Scala',
+      color: colours[1]
+    },
+    {
+      value: 30,
+      label: 'PHP',
+      color: colours[2]
+    },
+    {
+      value : 35,
+      label: 'HTML',
+      color: colours[3]
+    },
+    {
+      value : 35,
+      label: 'HTML',
+      color: colours2[0]
+    },{
+      value : 35,
+      label: 'HTML',
+      color: colours2[1]
+    }
+    ];
+var wifiTestData=[
+{
+      value: 0.017,
+      label: 'Basement',
+      color: colours[0]
+    },
+    {
+      value: 0.022,
+      label: 'Extend2.4',
+      color: colours[1]
+    },
+    {
+      value: 0.012,
+      label: 'Bell050',
+      color: colours[2]
+    }
+];
+ 
+var wifiTestData2 = {
+    labels: ["11,10,9"],
+    datasets: [
+        {
+            label: "My Other Fake Data",
+            fillColor: "rgba(85, 228, 241,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(0, 218, 238,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [3,1,3]
+        }
+    ]
+};
 
+var data2 = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+        {
+            label: "My Fake Data",
+            fillColor: "rgba(85, 228, 241,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(0, 218, 238,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81, 56, 55, 40]
+        }
+    ]
+};
 
 function accessPoint(ap) {
     this.signal = new Number(ap.signal);
@@ -390,6 +465,7 @@ function loadData(data){
 
         });
         loadBluetoothTable();
+        setChartData("","","","");
         $('#table-title').text("Bluetooth Data");
         //load into graphs and table
         //update view
