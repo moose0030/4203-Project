@@ -499,8 +499,8 @@ function loadData(data){
     var rows = "";
     $.each(wifiData, function(){
     console.log(this);
-  
-    leftGraphData.push(new simpleData(new Integer(this.signal),this.ssid,colours[0]));
+
+    leftGraphData.push(new simpleData(-1*new Number(this.signal),this.ssid,colours[0]));
     rows += "<tr><td>" + this.ssid + "</td><td>" + this.signal + "</td><td>" + this.channel + "</td><td>" + this.address + "</td></tr>";
     });
 
