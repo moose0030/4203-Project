@@ -207,13 +207,6 @@ body {
 
 
 ///////////////////     EXAMPLE DATA        //////////////////////
-
-var wifiData = [];
-var bluetoothData = [];
-var switchData=[];
-var leftGraphData = [];
-var rightGraphData;
-
 var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4'];
 var colours2= ['#EBB802','#4DCD01','#D70133','#2617A3'];
 var data = [
@@ -247,38 +240,7 @@ var data = [
       color: colours2[1]
     }
     ];
-var wifiTestData=[
-{
-      value: 0.017,
-      label: 'Basement',
-      color: colours[0]
-    },
-    {
-      value: 0.022,
-      label: 'Extend2.4',
-      color: colours[1]
-    },
-    {
-      value: 0.012,
-      label: 'Bell050',
-      color: colours[2]
-    }
-];
  
-var wifiTestData2 = {
-    labels: ["11,10,9"],
-    datasets: [
-        {
-            label: "My Other Fake Data",
-            fillColor: "rgba(85, 228, 241,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
-            highlightFill: "rgba(0, 218, 238,0.75)",
-            highlightStroke: "rgba(220,220,220,1)",
-            data: [3,1,3]
-        }
-    ]
-};
-
 var data2 = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
@@ -318,7 +280,7 @@ function wemoSwitch(ws){
 
 function androidSMS(sms){
   this.type = sms.type;
-  this.from =sms.from;
+  this.to =sms.to;
 }
 
 function androidLocation(al){
@@ -369,14 +331,17 @@ var table = document.getElementById('data-table');
 
 //////////////////         DATA          /////////////////////////
 
-//wifiData
-//bluetoothData
+var wifiData = [];
+var bluetoothData = [];
 
-//var switchData = [];
+var switchData=[];
 var motionData = [];
 
 var smsData = [];
 var loactionData = [];
+
+var leftGraphData = [];
+var rightGraphData;
 
 var updateInterval = 1000;
 var currentView = "RPI-WIFI";
@@ -648,12 +613,12 @@ function loadData(data){
   function loadSMSTable(){
     cleanTable();
     $('#head-table tr').append('<td>Type</td>')
-    $('#head-table tr').append('<td>From</td>')
+    $('#head-table tr').append('<td>To</td>')
 
      var rows = "";
     $.each(smsData, function(){
     console.log(this);
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.from + "</td></tr>";
+    rows += "<tr><td>" + this.type + "</td><td>" +  this.to + "</td></tr>";
     });
 
     $( rows ).appendTo( "#body-table" );
