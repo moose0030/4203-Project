@@ -105,7 +105,7 @@
 var wifiData = [];
 var bluetoothData = [];
 var leftGraphData = [];
-var rightGraphData = [];
+var rightGraphData;
 var actualWifi =
   {"type": "RPI-WIFI", "devices": ["{\"signal\": -39, \"ssid\": \"Extend 2.4\", \"channel\": 11, \"address\": \"00:90:A9:AD:CA:3B\"}", "{\"signal\": -83, \"ssid\": \"BELL050\", \"channel\": 11, \"address\": \"D8:6C:E9:2A:66:CD\"}", "{\"signal\": -89, \"ssid\": \"Promised LAN\", \"channel\": 4, \"address\": \"00:23:6A:46:E7:99\"}", "{\"signal\": -75, \"ssid\": \"Hosanna\", \"channel\": 1, \"address\": \"78:8D:F7:4E:AA:A8\"}", "{\"signal\": -71, \"ssid\": \"HP-Print-CD-Deskjet 3510 series\", \"channel\": 6, \"address\": \"74:46:A0:6B:45:CD\"}", "{\"signal\": -77, \"ssid\": \"BELL1030\", \"channel\": 6, \"address\": \"00:25:3C:F3:71:41\"}", "{\"signal\": -59, \"ssid\": \"Basement\", \"channel\": 11, \"address\": \"00:FC:8D:06:AD:58\"}"]};
   console.log(actualWifi);
@@ -304,16 +304,35 @@ function androidLocation(al){
 function simpleData(value,label,color){
   this.value = value;
   this.label = label;
-  //this.color = color;
+  this.color = color;
 }
 
-var newData = [];
-newData.push(new simpleData(41,"extend2.4",colours[0]));
-newData.push(new simpleData(61,"a.4",colours[1]));
-newData.push(new simpleData(21,"exsfasftend2.4",colours[2]));
-newData.push(new simpleData(81,"exasfdtend2.4",colours[3]));
+function complexData(labels,l,d){
+  this.labels = labels;
+  this.datasets = [{
+    label : l,
+    fillColor: "rgba(85, 228, 241,0.5)",
+    strokeColor: "rgba(220,220,220,0.8)",
+    highlightFill: "rgba(0, 218, 238,0.75)",
+    highlightStroke: "rgba(220,220,220,1)",
+    data : d
+  }];
+}
 
-var ap = new accessPoint(testJson.json.devices[0]);
+//var newData2 = new complexData(["a","b","c","d"],"Speed!",[3,4,5,6]);
+//console.log(newData2);
+
+/*labels: ["11"],
+    datasets: [
+        {
+            label: "Channels",
+            fillColor: "rgba(85, 228, 241,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(0, 218, 238,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [3]
+        }
+    ]*/
 
 ///////////////////     HTML ELEMENTS       //////////////////////
 var chart1 = document.getElementById('chart1').getContext("2d");
@@ -337,8 +356,8 @@ var loactionData = [];
 var updateInterval = 1000;
 var currentView = "RPI-WIFI";
 
-var ch1= new Chart(chart1).PolarArea(newData);
-var ch2 = new Chart(chart2).Bar(data2);
+var ch1;//= new Chart(chart1).PolarArea(newData);
+var ch2;//= new Chart(chart2).Bar(newData2);
 
 
 ///////////////////     EVENT LISTENERS       //////////////////////
@@ -497,20 +516,24 @@ function loadData(data){
     $('#head-table tr').append('<td>Address</td>')
     leftGraphData.length = 0;
     var rows = "";
+    var channels = [];
+    var labels = [];
     $.each(wifiData, function(){
     console.log(this);
 
     leftGraphData.push(new simpleData(-1*new Number(this.signal),this.ssid,colours[0]));
+    channels.push(this.channel);
+    labels.push(this.ssid);
     rows += "<tr><td>" + this.ssid + "</td><td>" + this.signal + "</td><td>" + this.channel + "</td><td>" + this.address + "</td></tr>";
     });
-
+    rightGraphData = new complexData(labels,"Channels",channels);
     $( rows ).appendTo( "#body-table" );
     ch1.destroy();
     ch2.destroy();
 
 
     ch1 = new Chart(chart1).PolarArea(leftGraphData);
-    ch2 = new Chart(chart2).Bar(wifiTestData2);
+    ch2 = new Chart(chart2).Bar(rightGraphData);
   }
 
   function loadBluetoothTable(){
