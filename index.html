@@ -381,8 +381,11 @@ var socket = io();
     //clean posts
     $.each(data.rpi_wifi, function(){
       console.log(this);
-      $.each(this.devices, function(){
+      var obj = this;
+      console.log(obj);
+      $.each(obj.devices, function(){
         console.log(this);
+        
       });
     });
   });
