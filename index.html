@@ -658,7 +658,7 @@ function loadData(data){
     $( rows ).appendTo( "#body-table" );
     ch1.destroy();
     ch2.destroy();
-    leftGraphData = count(smsData,"to");
+    leftGraphData = countProp(smsData,"to");
     rightGraphData = createTimeData(smsData,"SMS Time");
     ch1 = new Chart(chart1).Pie(leftGraphData);
     ch2 = new Chart(chart2).Bar(rightGraphData);
@@ -734,7 +734,7 @@ function createTimeData(data,title){
     return new complexData(axis,title,values);
 }
 
-function count(data,property){
+function countProp(data,property){
   var myMap ={};
   console.log(data.length);
 
