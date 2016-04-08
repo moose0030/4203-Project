@@ -377,8 +377,27 @@ var socket = io();
   });
 
   socket.on('_load', function(data){
-    
+
+    //clean posts
+    $.each(data.rpi_wifi, function(){
+      console.log(this);
+      $.each(this.devices, function(){
+        console.log(this);
+      });
+    });
   });
+
+/*
+    wifiData = 
+    bluetoothData = 
+
+    switchData= rpi;
+    motionData = [];
+
+    smsData = [];
+    locationData = [];
+  */  
+  
 
 ///////////////////       FUNCTIONS         //////////////////////
 
@@ -452,7 +471,7 @@ function loadData(data){
         break;
         case "WEMO-SWITCH":
         var a = new wemoSwitch(data);
-        if(switchData.length<10)
+        if(switchData.length<20)
           switchData.push(a);
         else{
           switchData.pop();
@@ -470,7 +489,7 @@ function loadData(data){
         break;
         case "WEMO-MOTION":
         var a = new wemoMotion(data);
-        if(motionData.length<10)
+        if(motionData.length<20)
           motionData.push(a);
         else{
           motionData.pop();
@@ -487,7 +506,7 @@ function loadData(data){
         break;
         case "ANDROID-LOCATION": 
         var a = new androidLocation(data);
-        if(locationData.length<10)
+        if(locationData.length<20)
           locationData.push(a);
         else{
           locationData.pop();
@@ -504,7 +523,7 @@ function loadData(data){
         break;
         case "ANDROID-SMS": 
         var a = new androidSMS(data);
-        if(smsData.length<10)
+        if(smsData.length<20)
           smsData.push(a);
         else{
           smsData.pop();

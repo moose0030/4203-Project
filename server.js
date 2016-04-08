@@ -8,6 +8,8 @@ app.listen(port)
 //Storage of all data
 var events = {};
 
+
+// holds 20 events 
 var rpi_bt = [];
 var rpi_wifi = [];
 var wemo_switch = [];
@@ -41,20 +43,55 @@ function handler (req, res) {
         //io.emit('_post',obj.type,obj);
         io.emit('_post',obj);
         switch(obj.type){
-            case "rpi-wifi":rpi_wifi.push(obj); break;
-            case "rpi-bt": rpi_bt.push(obj); break;
-            case "wemo-switch": wemo_switch.push(obj); break;
-            case "wemo-motion": wemo_motion.push(obj); break;
-            case "android-location": android_location.push(obj); break;
-            case "android-sms":android_sms.push(obj); break;
+            case "RPI-WIFI":
+            if(rpi_wifi.length< 20)
+              rpi_wifi.push(obj);
+            else{
+              rpi_wifi.pop();
+              rpi_wifi.push(obj);
+            }break;
+            case "RPI-BT":
+            if(rpi_bt.length< 20)
+              rpi_bt.push(obj);
+            else{
+              rpi_bt.pop();
+              rpi_bt.push(obj);
+            }break;
+            case "WEMO-SWITCH":
+            if(wemo_switch.length< 20)
+              wemo_switch.push(obj);
+            else{
+              wemo_switch.pop();
+              wemo_switch.push(obj);
+            }break;
+            case "WEMO-MOTION":
+            if(wemo_motion.length< 20)
+              wemo_motion.push(obj);
+            else{
+              wemo_motion.pop();
+              wemo_motion.push(obj);
+            }break;
+            case "ANDROID-LOCATION":
+            if(android_location.length< 20)
+              android_location.push(obj);
+            else{
+              android_location.pop();
+              android_location.push(obj);
+            }break;
+            case "ANDROID-SMS":
+            if(android_sms.length< 20)
+              android_sms.push(obj);
+            else{
+              android_sms.pop();
+              android_sms.push(obj);
+            }break;
         }
     });
   }
 }
 
 io.on('connection', function (socket) {
-  //test data
-  socket.emit();
+  socket.emit("_load",packageEvents());
 });
 
 console.log('Listening...');
