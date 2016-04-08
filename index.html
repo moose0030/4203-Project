@@ -399,26 +399,30 @@ var socket = io();
     });
 
   $.each(data.wemo_switch, function(){
+      console.log(this);
       var obj = this;
-      var a = new wemoSwitch(a);
+      var a = new wemoSwitch(obj);
       switchData.push(a);
     });
 
   $.each(data.wemo_motion, function(){
+      console.log(this);
       var obj = this;
-      var a = new wemoMotion(a);
+      var a = new wemoMotion(obj);
       motionData.push(a);
     });
 
   $.each(data.android_location, function(){
+      console.log(this);
       var obj = this;
-      var a = new androidLocation(a);
+      var a = new androidLocation(obj);
       locationData.push(a);
     });
 
   $.each(data.android_sms, function(){
+      console.log(this);
       var obj = this;
-      var a = new androidLocation(a);
+      var a = new androidLocation(obj);
       smsData.push(a);
     });
 
