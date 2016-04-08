@@ -693,7 +693,7 @@ function loadData(data){
     
     rightGraphData = createTimeData(smsData,"SMS Time");
     ch1 = new Chart(chart1).Bar(data2);
-    ch2 = new Chart(chart2).Line(rightGraphData);
+    ch2 = new Chart(chart2).Bar(rightGraphData);
   }
 
   function loadLocationTable(){
@@ -743,11 +743,11 @@ function createTimeData(data,title){
   console.log(data.length);
 
   $.each(data, function(){
-    if (typeof myMap[this.time.getHours()] === "undefined") {
-      myMap[this.time.getHours()] = 1;
+    if (typeof myMap[this.time.getMinutes()] === "undefined") {
+      myMap[this.time.getMinutes()] = 1;
     }
     else{
-      myMap[this.time.getHours()]++;
+      myMap[this.time.getMinutes()]++;
     }
   });
 
