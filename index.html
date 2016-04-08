@@ -658,9 +658,9 @@ function loadData(data){
     $( rows ).appendTo( "#body-table" );
     ch1.destroy();
     ch2.destroy();
-    
+    leftGraphData = count(smsData,"to");
     rightGraphData = createTimeData(smsData,"SMS Time");
-    ch1 = new Chart(chart1).Bar(data2);
+    ch1 = new Chart(chart1).Pie(leftGraphData);
     ch2 = new Chart(chart2).Bar(rightGraphData);
   }
 
@@ -732,6 +732,31 @@ function createTimeData(data,title){
       console.log(time,count);
   }
     return new complexData(axis,title,values);
+}
+
+function count(data,property){
+  var myMap ={};
+  console.log(data.length);
+
+  $.each(data, function(){
+    if (typeof myMap[this[property]] === "undefined") {
+      myMap[this[property]] = 1;
+    }
+    else{
+      myMap[this[property]]++;
+    }
+  });
+
+  var propValue;
+  var values=[];
+  var axis =[];
+  for(var prop in myMap) {
+      count = myMap[prop]
+      values.push(new simpleData(count,prop,colours[2]));
+      console.log(prop,count);
+  }
+  console.log(values);
+    return values;
 }
 
     </script>
