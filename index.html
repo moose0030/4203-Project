@@ -382,10 +382,10 @@ var socket = io();
     $.each(data.rpi_wifi, function(){
       console.log(this);
       var obj = this;
-      console.log(obj);
       $.each(obj.devices, function(){
-        console.log(this);
-        
+    
+        var a = new accessPoint(JSON.parse(this));
+        console.log(a);
       });
     });
   });
