@@ -383,11 +383,21 @@ var socket = io();
       console.log(this);
       var obj = this;
       $.each(obj.devices, function(){
-    
         var a = new accessPoint(JSON.parse(this));
-        console.log(a);
+        wifiData.push(a);
       });
     });
+
+
+    $.each(data.rpi_bt, function(){
+      console.log(this);
+      var obj = this;
+      $.each(obj.devices, function(){
+        var a = new bluetoothDevice(JSON.parse(this));
+        bluetoothData.push(a);
+      });
+    });
+
   });
 
 /*
