@@ -271,6 +271,7 @@ function bluetoothDevice(bd){
 function wemoMotion(wm){
   this.type = wm.type;
   this.status = wm.status;
+  this.location = "Living Room";
   this.time = new Date();
 }
 
@@ -571,49 +572,9 @@ function loadData(data){
     $('#head-table tr').append('<td>Address</td>')
     $('#head-table tr').append('<td>Time</td>')
 
-     var rows = "";
-     var labels = [];
-     var totals = [];
-     //var num = 0;
-
- var a = new Date(2000, 10, 2, 9, 1, 2, 3);
- var b = new Date(2000, 10, 2, 13, 1, 2, 3);
- var c = new Date(2000, 10, 2, 6, 1, 2, 3);
- var d = new Date(2000, 10, 2, 15, 1, 2, 3);
-
-    var myData=[
-    {
-      time:a
-    },
-    {
-      time:b
-    },
-    {
-      time:c
-    },
-    {
-      time:d
-    },
-    {
-      time:d
-    },
-    {
-      time:c
-    },
-    {
-      time:b
-    },
-    {
-      time:a
-    },
-    {
-      time:b
-    }
-    ];
-
-    
+    var rows = ""; 
     $.each(myData, function(){
-      //rows += "<tr><td>" + this.name + "</td><td>" +  this.address + "</td><td>" + this.time.toDateString() + "</td></tr>";
+      rows += "<tr><td>" + this.name + "</td><td>" +  this.address + "</td><td>" + this.time.toDateString() + "</td></tr>";
     });
 
 
@@ -659,20 +620,25 @@ function loadData(data){
   function loadMotionTable(){
     cleanTable();
     $('#head-table tr').append('<td>Type</td>')
+    $('#head-table tr').append('<td>Location</td>')
     $('#head-table tr').append('<td>Status</td>')
     $('#head-table tr').append('<td>Time</td>')
 
      var rows = "";
-    $.each(testJson3.json.devices, function(){
+    $.each(motionData, function(){
     console.log(this);
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.status + "</td><td>" + this.time.toDateString()+ "</td></tr>";
+    rows += "<tr><td>" + this.type + "</td><td>" +this.location + "</td><td>" + this.status + "</td><td>" + this.time.toDateString()+ "</td></tr>";
     });
 
     $( rows ).appendTo( "#body-table" );
     ch1.destroy();
     ch2.destroy();
+
+    //leftGraphData = create pie graph on location of device
+    rightGraphData = createTimeData(motionData,"Motion Time");
+
     ch1 = new Chart(chart1).Pie(data);
-    ch2 = new Chart(chart2).Line(data2);
+    ch2 = new Chart(chart2).Line(rightGraphData);
   }
 
   function loadSMSTable(){
@@ -703,7 +669,7 @@ function loadData(data){
     $('#head-table tr').append('<td>Time</td>')
 
      var rows = "";
-    $.each(testJson5.json.devices, function(){
+    $.each(locationData, function(){
     console.log(this);
     rows += "<tr><td>" + this.type + "</td><td>" +  this.location + "</td><td>" + this.time.toDateString()+ "</td></tr>";
     });
@@ -711,8 +677,11 @@ function loadData(data){
     $( rows ).appendTo( "#body-table" );
     ch1.destroy();
     ch2.destroy();
+
+    rightGraphData = createTimeData(locationData,"Location Time");
+
     ch1 = new Chart(chart1).Pie(data);
-    ch2 = new Chart(chart2).Line(data2);
+    ch2 = new Chart(chart2).Line(rightGraphData;
   }
 
   function notifyIcon(){
