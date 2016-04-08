@@ -167,17 +167,16 @@ body {
           </h1>
           <div class="row placeholders">
             <div class="col-xs-6 placeholder">
-               <canvas id="chart1" width="400" height="400"></canvas>
+               <canvas id="chart1" width="300" height="300"></canvas>
               <h4 id ="chart1-title">Label</h4>
               <span class="text-muted" id="chart1-desc">Something else</span>
             </div>
             <div class="col-xs-6 placeholder">
-             <canvas id="chart2" width="400" height="400"></canvas>
+             <canvas id="chart2" width="300" height="300"></canvas>
               <h4 id ="chart2-title">Label</h4>
               <span class="text-muted" id="chart2-desc">Something else</span>
             </div>
           </div>
-          <h2 class="sub-header" id="table-title">Raw Data</h2>
           <div class="table-responsive">
             <table class="table table-striped" id="data-table">
               <thead id="head-table">
@@ -260,32 +259,37 @@ function accessPoint(ap) {
     this.ssid = ap.ssid;
     this.channel = ap.channel;
     this.address = ap.address;
-    console.log(this);
+    this.time = new Date();
 }
 
 function bluetoothDevice(bd){
   this.name = bd.name;
   this.address = bd.address;
+  this.time = new Date();
 }
 
 function wemoMotion(wm){
   this.type = wm.type;
   this.status = wm.status;
+  this.time = new Date();
 }
 
 function wemoSwitch(ws){
   this.type = ws.type;
   this.mode =ws.mode;
+  this.time = new Date();
 }
 
 function androidSMS(sms){
   this.type = sms.type;
   this.to =sms.to;
+  this.time = new Date();
 }
 
 function androidLocation(al){
   this.type = al.type;
   this.location =al.location;
+  this.time = new Date();
 }
 
 function simpleData(value,label,color){
@@ -338,7 +342,7 @@ var switchData=[];
 var motionData = [];
 
 var smsData = [];
-var loactionData = [];
+var locationData = [];
 
 var leftGraphData = [];
 var rightGraphData;
@@ -362,7 +366,7 @@ var socket = io();
 
     var obj = data;//JSON.parse(data);
     console.log(obj);
-    console.log(obj.type + "<---obj   currentView---->" + currentView);
+    console.log(obj.type + "<----obj   currentView---->" + currentView);
     //if(obj.type == currentView){
       loadData(obj);
     /*}
@@ -461,7 +465,14 @@ function loadData(data){
         //load into graphs and table
         //update view
         break;
-        case "wemo-motion": 
+        case "wemo-motion":
+        var a = new wemoMotion(data);
+        if(motionData.length<10)
+          motionData.push(a);
+        else{
+          motionData.pop();
+          motionData.push(a);
+        }
         //load view data with wifi related data
         if(data.type == currentView){
         loadMotionTable();
@@ -472,6 +483,13 @@ function loadData(data){
         //update view
         break;
         case "android-location": 
+        var a = new androidLocation(data);
+        if(locationData.length<10)
+          locationData.push(a);
+        else{
+          locationData.pop();
+          locationData.push(a);
+        }
         //load view data with wifi related data
         if(data.type == currentView){
         loadLocationTable();
@@ -523,6 +541,7 @@ function loadData(data){
     $('#head-table tr').append('<td>Signal Strength</td>')
     $('#head-table tr').append('<td>Channel</td>')
     $('#head-table tr').append('<td>Address</td>')
+    $('#head-table tr').append('<td>Time</td>')
     leftGraphData.length = 0;
     var rows = "";
     var channels = [];
@@ -533,7 +552,7 @@ function loadData(data){
     leftGraphData.push(new simpleData(-1*new Number(this.signal),this.ssid,colours[0]));
     channels.push(this.channel);
     labels.push(this.ssid);
-    rows += "<tr><td>" + this.ssid + "</td><td>" + this.signal + "</td><td>" + this.channel + "</td><td>" + this.address + "</td></tr>";
+    rows += "<tr><td>" + this.ssid + "</td><td>" + this.signal + "</td><td>" + this.channel + "</td><td>" + this.address + "</td><td>" + this.time.toDateString() +"</td></tr>";
     });
     rightGraphData = new complexData(labels,"Channels",channels);
     $( rows ).appendTo( "#body-table" );
@@ -549,11 +568,12 @@ function loadData(data){
     cleanTable();
     $('#head-table tr').append('<td>Device</td>')
     $('#head-table tr').append('<td>Address</td>')
+    $('#head-table tr').append('<td>Time</td>')
 
      var rows = "";
     $.each(bluetoothData, function(){
     console.log(this);
-    rows += "<tr><td>" + this.name + "</td><td>" +  this.address + "</td></tr>";
+    rows += "<tr><td>" + this.name + "</td><td>" +  this.address + "</td><td>" + this.time.toDateString() + "</td></tr>";
     });
 
     $( rows ).appendTo( "#body-table" );
@@ -567,6 +587,7 @@ function loadData(data){
     cleanTable();
     $('#head-table tr').append('<td>Type</td>')
     $('#head-table tr').append('<td>Mode</td>')
+    $('#head-table tr').append('<td>Time</td>')
 
      var rows = "";
      var on = 0;
@@ -578,7 +599,7 @@ function loadData(data){
       on++;
     if(this.mode == 'off')
       off++;
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.mode + "</td></tr>";
+    rows += "<tr><td>" + this.type + "</td><td>" +  this.mode + "</td><td>" + this.time.toDateString()+ "</td></tr>";
     });
 
     leftGraphData.push(new simpleData(on,"on",colours[0]));
@@ -596,11 +617,12 @@ function loadData(data){
     cleanTable();
     $('#head-table tr').append('<td>Type</td>')
     $('#head-table tr').append('<td>Status</td>')
+    $('#head-table tr').append('<td>Time</td>')
 
      var rows = "";
     $.each(testJson3.json.devices, function(){
     console.log(this);
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.status + "</td></tr>";
+    rows += "<tr><td>" + this.type + "</td><td>" +  this.status + "</td><td>" + this.time.toDateString()+ "</td></tr>";
     });
 
     $( rows ).appendTo( "#body-table" );
@@ -614,11 +636,12 @@ function loadData(data){
     cleanTable();
     $('#head-table tr').append('<td>Type</td>')
     $('#head-table tr').append('<td>To</td>')
+    $('#head-table tr').append('<td>Time</td>')
 
      var rows = "";
     $.each(smsData, function(){
     console.log(this);
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.to + "</td></tr>";
+    rows += "<tr><td>" + this.type + "</td><td>" +  this.to + "</td><td>" + this.time.toDateString()+ "</td></tr>";
     });
 
     $( rows ).appendTo( "#body-table" );
@@ -632,11 +655,12 @@ function loadData(data){
     cleanTable();
     $('#head-table tr').append('<td>Type</td>')
     $('#head-table tr').append('<td>Location</td>')
+    $('#head-table tr').append('<td>Time</td>')
 
      var rows = "";
     $.each(testJson5.json.devices, function(){
     console.log(this);
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.location + "</td></tr>";
+    rows += "<tr><td>" + this.type + "</td><td>" +  this.location + "</td><td>" + this.time.toDateString()+ "</td></tr>";
     });
 
     $( rows ).appendTo( "#body-table" );

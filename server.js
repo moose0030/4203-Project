@@ -16,6 +16,7 @@ var android_location = [];
 var android_sms = [];
 var weather = [];
 
+
 function handler (req, res) {
   fs.readFile(__dirname + '/index.html',
       function (err, data) {
@@ -52,8 +53,8 @@ function handler (req, res) {
 }
 
 io.on('connection', function (socket) {
-
-  //socket.emit('_load', packageEvents());
+  //test data
+  socket.emit();
 });
 
 console.log('Listening...');
