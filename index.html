@@ -401,7 +401,9 @@ function switchThing(option){
       case 'RPI-WIFI':loadWifiTable();break;
       case 'RPI-BT':loadBluetoothTable();break;
       case 'WEMO-SWITCH':loadSwitchTable();break;
+      case 'WEMO-MOTION':loadMotionTable();break;
       case 'ANDROID-SMS':loadSMSTable();break;
+      case 'ANDROID-LOCATION':loadLocationTable();break;
     }
   }
 
@@ -466,7 +468,7 @@ function loadData(data){
         //load into graphs and table
         //update view
         break;
-        case "wemo-motion":
+        case "WEMO-MOTION":
         var a = new wemoMotion(data);
         if(motionData.length<10)
           motionData.push(a);
@@ -483,7 +485,7 @@ function loadData(data){
         //load into graphs and table
         //update view
         break;
-        case "android-location": 
+        case "ANDROID-LOCATION": 
         var a = new androidLocation(data);
         if(locationData.length<10)
           locationData.push(a);
@@ -573,12 +575,12 @@ function loadData(data){
     $('#head-table tr').append('<td>Time</td>')
 
     var rows = ""; 
-    $.each(myData, function(){
+    $.each(bluetoothData, function(){
       rows += "<tr><td>" + this.name + "</td><td>" +  this.address + "</td><td>" + this.time.toDateString() + "</td></tr>";
     });
 
 
-    rightGraphData = createTimeData(myData,"Bluetooth Connections");
+    rightGraphData = createTimeData(bluetoothData,"Bluetooth Connections");
 
 
     $( rows ).appendTo( "#body-table" );
@@ -681,7 +683,7 @@ function loadData(data){
     rightGraphData = createTimeData(locationData,"Location Time");
 
     ch1 = new Chart(chart1).Pie(data);
-    ch2 = new Chart(chart2).Line(rightGraphData;
+    ch2 = new Chart(chart2).Line(rightGraphData);
   }
 
   function notifyIcon(){
