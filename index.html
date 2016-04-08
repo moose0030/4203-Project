@@ -398,18 +398,33 @@ var socket = io();
       });
     });
 
+  $.each(data.wemo_switch, function(){
+      var obj = this;
+      var a = new wemoSwitch(a);
+      switchData.push(a);
+    });
+
+  $.each(data.wemo_motion, function(){
+      var obj = this;
+      var a = new wemoMotion(a);
+      motionData.push(a);
+    });
+
+  $.each(data.android_location, function(){
+      var obj = this;
+      var a = new androidLocation(a);
+      locationData.push(a);
+    });
+
+  $.each(data.android_sms, function(){
+      var obj = this;
+      var a = new androidLocation(a);
+      smsData.push(a);
+    });
+
   });
 
-/*
-    wifiData = 
-    bluetoothData = 
 
-    switchData= rpi;
-    motionData = [];
-
-    smsData = [];
-    locationData = [];
-  */  
   
 
 ///////////////////       FUNCTIONS         //////////////////////
