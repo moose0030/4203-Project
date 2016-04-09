@@ -130,7 +130,7 @@ body {
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a id="notification" onClick="refreshData()">Data is up to date.</a></li>
+            <li><a id="notification">Data is up to date.</a></li>
           </ul>
         </div>
       </div>
@@ -140,7 +140,7 @@ body {
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-4 col-md-2 sidebar">
-          <ul class="nav nav-sidebar" id="raspberrypi"<a> Raspberry Pi</a>
+          <ul class="nav nav-sidebar" id="raspberrypi"<a>Raspberry Pi</a>
             <li id="RPI-WIFI"><a onClick="switchThing('RPI-WIFI')">Wi-Fi</a></li>
             <li id="RPI-BT"><a onClick="switchThing('RPI-BT')">Bluetooth</a></li>
           </ul>
@@ -154,27 +154,17 @@ body {
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Update Interval
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu" id="choose-speed">
-              <li><a href="#">10</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">2</a></li>
-            </ul>
-          </div>
-          </h1>
+          <h1 class="page-header">Dashboard</h1>
           <div class="row placeholders">
             <div class="col-xs-6 placeholder">
                <canvas id="chart1" width="300" height="300"></canvas>
-              <h4 id ="chart1-title">Label</h4>
-              <span class="text-muted" id="chart1-desc">Something else</span>
+              <h4 id ="chart1-title">No data yet...</h4>
+              <span class="text-muted" id="chart1-desc"></span>
             </div>
             <div class="col-xs-6 placeholder">
              <canvas id="chart2" width="300" height="300"></canvas>
-              <h4 id ="chart2-title">Label</h4>
-              <span class="text-muted" id="chart2-desc">Something else</span>
+              <h4 id ="chart2-title">No data yet...</h4>
+              <span class="text-muted" id="chart2-desc"></span>
             </div>
           </div>
           <div class="table-responsive">
@@ -208,40 +198,10 @@ body {
 ///////////////////     EXAMPLE DATA        //////////////////////
 var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4'];
 var colours2= ['#EBB802','#4DCD01','#D70133','#2617A3'];
-var data = [
-    {
-      value: 25,
-      label: 'Java',
-      color: colours[0]
-    },
-    {
-      value: 10,
-      label: 'Scala',
-      color: colours[1]
-    },
-    {
-      value: 30,
-      label: 'PHP',
-      color: colours[2]
-    },
-    {
-      value : 35,
-      label: 'HTML',
-      color: colours[3]
-    },
-    {
-      value : 35,
-      label: 'HTML',
-      color: colours2[0]
-    },{
-      value : 35,
-      label: 'HTML',
-      color: colours2[1]
-    }
-    ];
+var emptySimpleData = [];
  
-var data2 = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+var emptyComplexData = {
+    labels: [],
     datasets: [
         {
             label: "My Fake Data",
@@ -249,7 +209,7 @@ var data2 = {
             strokeColor: "rgba(220,220,220,0.8)",
             highlightFill: "rgba(0, 218, 238,0.75)",
             highlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
+            data: []
         }
     ]
 };
@@ -311,27 +271,9 @@ function complexData(labels,l,d){
   }];
 }
 
-//var newData2 = new complexData(["a","b","c","d"],"Speed!",[3,4,5,6]);
-//console.log(newData2);
-
-/*labels: ["11"],
-    datasets: [
-        {
-            label: "Channels",
-            fillColor: "rgba(85, 228, 241,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
-            highlightFill: "rgba(0, 218, 238,0.75)",
-            highlightStroke: "rgba(220,220,220,1)",
-            data: [3]
-        }
-    ]*/
-
 ///////////////////     HTML ELEMENTS       //////////////////////
 var chart1 = document.getElementById('chart1').getContext("2d");
 var chart2 = document.getElementById('chart2').getContext("2d");
-
-
-
 var table = document.getElementById('data-table');
 
 //////////////////         DATA          /////////////////////////
@@ -353,8 +295,8 @@ var currentView = "RPI-WIFI";
 
 var mostRecent = "";
 
-var ch1 = new Chart(chart1).PolarArea(data);
-var ch2 = new Chart(chart2).Bar(data2);
+var ch1 = new Chart(chart1).PolarArea(emptySimpleData);
+var ch2 = new Chart(chart2).Bar(emptyComplexData);
 
 
 ///////////////////     EVENT LISTENERS       //////////////////////
@@ -364,85 +306,72 @@ $('#choose-speed li').on('click', function(){
 });
 
 var socket = io();
-  socket.on('_post', function(data){
-    console.log(data);
+socket.on('_post', function(data){
+  console.log(data);
 
-    var obj = data;//JSON.parse(data);
-    console.log(obj);
-    console.log(obj.type + "<----obj   currentView---->" + currentView);
-    
-      loadData(obj);
-    if(obj.type != currentView){
+  var obj = data;//JSON.parse(data);
+  console.log(obj);
+  console.log(obj.type + "<----obj   currentView---->" + currentView);
+  loadData(obj);
+  if(obj.type != currentView){
       notifyIcon(obj.type);
     }
+});
+
+socket.on('_load', function(data){
+  $.each(data.rpi_wifi, function(){
+    console.log(this);
+    var obj = this;
+    $.each(obj.devices, function(){
+      var a = new accessPoint(JSON.parse(this));
+      wifiData.push(a);
+    });
   });
 
-  socket.on('_load', function(data){
-
-    //clean posts
-    $.each(data.rpi_wifi, function(){
-      console.log(this);
-      var obj = this;
-      $.each(obj.devices, function(){
-        var a = new accessPoint(JSON.parse(this));
-        wifiData.push(a);
-      });
+  $.each(data.rpi_bt, function(){
+    console.log(this);
+    var obj = this;
+    $.each(obj.devices, function(){
+      var a = new bluetoothDevice(JSON.parse(this));
+      bluetoothData.push(a);
     });
-
-
-    $.each(data.rpi_bt, function(){
-      console.log(this);
-      var obj = this;
-      $.each(obj.devices, function(){
-        var a = new bluetoothDevice(JSON.parse(this));
-        bluetoothData.push(a);
-      });
-    });
+  });
 
   $.each(data.wemo_switch, function(){
       console.log(this);
       var obj = this;
       var a = new wemoSwitch(obj);
       switchData.push(a);
-    });
+  });
 
   $.each(data.wemo_motion, function(){
       console.log(this);
       var obj = this;
       var a = new wemoMotion(obj);
       motionData.push(a);
-    });
+  });
 
   $.each(data.android_location, function(){
       console.log(this);
       var obj = this;
       var a = new androidLocation(obj);
       locationData.push(a);
-    });
+  });
 
   $.each(data.android_sms, function(){
       console.log(this);
       var obj = this;
       var a = new androidLocation(obj);
       smsData.push(a);
-    });
-
   });
+});
 
 
   
 
 ///////////////////       FUNCTIONS         //////////////////////
 
-/*var myFunction = function(){
-    clearInterval(interval);
-    interval = setInterval(myFunction, updateInterval);
-    alert("Hi");
-}
-  var interval = setInterval(myFunction, updateInterval);
-*/
 function switchThing(option){
-    //this
     $( "#overview" ).children().removeClass();
     $( "#raspberrypi" ).children().removeClass();
     $( "#wemo" ).children().removeClass();
@@ -468,313 +397,277 @@ function loadData(data){
     console.log("Empty data object");
     return;
   }*/
-    console.log(data.type);
+  console.log(data.type);
   switch(data.type){
     case "RPI-WIFI":      
-        //data.rpi_wifi.forEach(iterateWifi);
-        wifiData.length = 0;
-        $.each(data.devices, function(){
-    
+      wifiData.length = 0;
+      $.each(data.devices, function(){
         var a = new accessPoint(JSON.parse(this));
         wifiData.push(a);
+      });
 
-        });
-        if(data.type == currentView){
+      if(data.type == currentView){
         loadWifiTable();
         $('#table-title').text("Wi-Fi Data");
       }
-        //load view data with wifi related data
-        //load into graphs and table
-        //update view
-        break;
-        case "RPI-BT": 
-        //load view data with wifi related data
-        //data.rpi_bt.forEach(iterateBluetooth);
-        bluetoothData.length = 0;
-            $.each(data.devices, function(){
-        
+      break;
+
+    case "RPI-BT": 
+      bluetoothData.length = 0;
+      $.each(data.devices, function(){
         var a = new bluetoothDevice(JSON.parse(this));
         bluetoothData.push(a);
+      });
 
-        });
-        if(data.type == currentView){
+      if(data.type == currentView){
         loadBluetoothTable();
         $('#table-title').text("Bluetooth Data");
       }
-        //load into graphs and table
-        //update view
-        break;
-        case "WEMO-SWITCH":
-        var a = new wemoSwitch(data);
-        if(switchData.length<20)
-          switchData.push(a);
-        else{
-          switchData.pop();
-          switchData.push(a);
-        }
+      break;
 
-        //load view data with wifi related data
-        if(data.type == currentView){
+    case "WEMO-SWITCH":
+      var a = new wemoSwitch(data);
+      if(switchData.length<20)
+        switchData.push(a);
+      else{
+        switchData.pop();
+        switchData.push(a);
+      }
+
+      if(data.type == currentView){
         loadSwitchTable();
-        
         $('#table-title').text("WeMo Switch Data");
       }
-        //load into graphs and table
-        //update view
-        break;
-        case "WEMO-MOTION":
-        var a = new wemoMotion(data);
-        if(motionData.length<20)
-          motionData.push(a);
-        else{
-          motionData.pop();
-          motionData.push(a);
-        }
-        //load view data with wifi related data
-        if(data.type == currentView){
+      break;
+
+    case "WEMO-MOTION":
+      var a = new wemoMotion(data);
+      if(motionData.length<20)
+        motionData.push(a);
+      else{
+        motionData.pop();
+        motionData.push(a);
+      }
+      if(data.type == currentView){
         loadMotionTable();
-        
         $('#table-title').text("WeMo Motion Data");
       }
-        //load into graphs and table
-        //update view
-        break;
-        case "ANDROID-LOCATION": 
-        var a = new androidLocation(data);
-        if(locationData.length<20)
-          locationData.push(a);
-        else{
-          locationData.pop();
-          locationData.push(a);
-        }
-        //load view data with wifi related data
-        if(data.type == currentView){
+      break;
+
+    case "ANDROID-LOCATION": 
+      var a = new androidLocation(data);
+      if(locationData.length<20)
+        locationData.push(a);
+      else{
+        locationData.pop();
+        locationData.push(a);
+      }
+      
+      if(data.type == currentView){
         loadLocationTable();
-        
         $('#table-title').text("Android Location Data");
       }
-        //load into graphs and table
-        //update view
-        break;
-        case "ANDROID-SMS": 
-        var a = new androidSMS(data);
-        if(smsData.length<20)
-          smsData.push(a);
-        else{
-          smsData.pop();
-          smsData.push(a);
-        }
-        //load view data with wifi related data
-        if(data.type == currentView){
+      break;
+
+    case "ANDROID-SMS": 
+      var a = new androidSMS(data);
+      if(smsData.length<20)
+        smsData.push(a);
+      else{
+        smsData.pop();
+        smsData.push(a);
+      }
+      
+      if(data.type == currentView){
         loadSMSTable();
-        
         $('#table-title').text("Android SMS Data");
       }
-        //load into graphs and table
-        //update view
-        break;
-        default: break;
-      }
-    }
+      break;
+
+    default: break;
+  }
+}
  
+function setChartData(title1,title2,desc1,desc2){
+  $('#chart1-desc').text(desc1);
+  $('#chart2-desc').text(desc2);
+  $('#chart1-title').text(title1);
+  $('#chart2-title').text(title2);
+}
 
+function cleanTable(){
+  $("#head-table td").remove(); 
+  $("#body-table tr").remove(); 
+  $("#body-table td").remove();
+}
 
-  function setChartData(title1,title2,desc1,desc2){
-    $('#chart1-desc').text(desc1);
-    $('#chart2-desc').text(desc2);
-    $('#chart1-title').text(title1);
-    $('#chart2-title').text(title2);
-  }
+function loadWifiTable(){
+  cleanTable();
+  setChartData("Signal Strength","Channels","Measured in dB","Number of Access Points/Channel");
+  $('#head-table tr').append('<td>SSID</td>')
+  $('#head-table tr').append('<td>Signal Strength</td>')
+  $('#head-table tr').append('<td>Channel</td>')
+  $('#head-table tr').append('<td>Address</td>')
+  $('#head-table tr').append('<td>Time</td>')
+  leftGraphData.length = 0;
+  var rows = "";
+  var channels = [];
+  var labels = [];
 
-  function cleanTable(){
-    $("#head-table td").remove(); 
-    $("#body-table tr").remove(); 
-    $("#body-table td").remove();
-  }
+  $.each(wifiData, function(){
+  console.log(this);
 
-  function loadWifiTable(){
-    cleanTable();
-    setChartData("Signal Strength","Channels","Measured in dB","Number of Access Points/Channel");
-    $('#head-table tr').append('<td>SSID</td>')
-    $('#head-table tr').append('<td>Signal Strength</td>')
-    $('#head-table tr').append('<td>Channel</td>')
-    $('#head-table tr').append('<td>Address</td>')
-    $('#head-table tr').append('<td>Time</td>')
-    leftGraphData.length = 0;
-    var rows = "";
-    var channels = [];
-    var labels = [];
+  leftGraphData.push(new simpleData(-1*new Number(this.signal),this.ssid,colours[0]));
+  channels.push(this.channel);
+  labels.push(this.ssid);
+  rows += "<tr><td>" + this.ssid + "</td><td>" + this.signal + "</td><td>" + this.channel + "</td><td>" + this.address + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes() +"</td></tr>";
+  });
+  rightGraphData = new complexData(labels,"Channels",channels);
+  $( rows ).appendTo( "#body-table" );
 
-    $.each(wifiData, function(){
-    console.log(this);
+  ch1.destroy();
+  ch2.destroy();
 
-    leftGraphData.push(new simpleData(-1*new Number(this.signal),this.ssid,colours[0]));
-    channels.push(this.channel);
-    labels.push(this.ssid);
-    rows += "<tr><td>" + this.ssid + "</td><td>" + this.signal + "</td><td>" + this.channel + "</td><td>" + this.address + "</td><td>" + this.time.toDateString() +"</td></tr>";
-    });
-    rightGraphData = new complexData(labels,"Channels",channels);
-    $( rows ).appendTo( "#body-table" );
-    ch1.destroy();
-    ch2.destroy();
+  ch1 = new Chart(chart1).PolarArea(leftGraphData);
+  ch2 = new Chart(chart2).Bar(rightGraphData);
+}
 
+function loadBluetoothTable(){
+  cleanTable();
+  setChartData("Number of Nearby Devices","","","");
+  $('#head-table tr').append('<td>Device</td>')
+  $('#head-table tr').append('<td>Address</td>')
+  $('#head-table tr').append('<td>Time</td>')
 
-    ch1 = new Chart(chart1).PolarArea(leftGraphData);
-    ch2 = new Chart(chart2).Bar(rightGraphData);
-  }
+  var rows = ""; 
+  $.each(bluetoothData, function(){
+    rows += "<tr><td>" + this.name + "</td><td>" +  this.address + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes() + "</td></tr>";
+  });
 
-  function loadBluetoothTable(){
-    cleanTable();
-    setChartData("Number of Nearby Devices","","","");
-    $('#head-table tr').append('<td>Device</td>')
-    $('#head-table tr').append('<td>Address</td>')
-    $('#head-table tr').append('<td>Time</td>')
+  rightGraphData = createTimeData(bluetoothData,"Bluetooth Connections");
 
-    var rows = ""; 
-    $.each(bluetoothData, function(){
-      rows += "<tr><td>" + this.name + "</td><td>" +  this.address + "</td><td>" + this.time.toDateString() + "</td></tr>";
-    });
+  $( rows ).appendTo( "#body-table" );
+  
+  ch1.destroy();
+  ch2.destroy();
+  
+  ch1 = new Chart(chart1).Bar(rightGraphData);  
+}
 
+function loadSwitchTable(){
+  cleanTable();
+  setChartData("Popular Events","Popular Time","Most Frequent Events","Most Frequent Periods of Time");
+  $('#head-table tr').append('<td>Type</td>')
+  $('#head-table tr').append('<td>Mode</td>')
+  $('#head-table tr').append('<td>Time</td>')
+  var rows = "";
+  var on = 0;
+  var off = 0;
+  leftGraphData.length = 0;
+  
+  $.each(switchData, function(){
+  console.log(this);
+  if(this.mode == 'on')
+    on++;
+  if(this.mode == 'off')
+    off++;
+  rows += "<tr><td>" + this.type + "</td><td>" +  this.mode + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes()+ "</td></tr>";
+  });
 
-    rightGraphData = createTimeData(bluetoothData,"Bluetooth Connections");
+  leftGraphData.push(new simpleData(on,"on",colours[0]));
+  leftGraphData.push(new simpleData(off,"off",colours[1]));
+  rightGraphData = createTimeData(switchData,"Switch Time");
+  $( rows ).appendTo( "#body-table" );
+  
+  ch1.destroy();
+  ch2.destroy();
+  
+  ch1 = new Chart(chart1).Pie(leftGraphData);
+  ch2 = new Chart(chart2).Bar(rightGraphData);
 
+}
 
-    $( rows ).appendTo( "#body-table" );
-    ch1.destroy();
-    ch2.destroy();
-    ch1 = new Chart(chart1).Bar(rightGraphData);  
-  }
+function loadMotionTable(){
+  cleanTable();
+  setChartData("Popular Locations","Popular Time","Most Frequent Locations","Most Frequent Periods of Time");
+  $('#head-table tr').append('<td>Type</td>')
+  $('#head-table tr').append('<td>Location</td>')
+  $('#head-table tr').append('<td>Status</td>')
+  $('#head-table tr').append('<td>Time</td>')
 
-  function loadSwitchTable(){
-    cleanTable();
-    setChartData("Popular Events","Popular Time","Most Frequent Events","Most Frequent Periods of Time");
-    $('#head-table tr').append('<td>Type</td>')
-    $('#head-table tr').append('<td>Mode</td>')
-    $('#head-table tr').append('<td>Time</td>')
-    var rows = "";
-    var on = 0;
-    var off = 0;
-    leftGraphData.length = 0;
-    
-    $.each(switchData, function(){
-    console.log(this);
-    if(this.mode == 'on')
-      on++;
-    if(this.mode == 'off')
-      off++;
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.mode + "</td><td>" + this.time.toDateString()+ "</td></tr>";
-    });
+   var rows = "";
+  $.each(motionData, function(){
+  console.log(this);
+  rows += "<tr><td>" + this.type + "</td><td>" +this.location + "</td><td>" + this.status + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes()+ "</td></tr>";
+  });
 
-    leftGraphData.push(new simpleData(on,"on",colours[0]));
-    leftGraphData.push(new simpleData(off,"off",colours[1]));
-    rightGraphData = createTimeData(switchData,"Switch Time");
-    $( rows ).appendTo( "#body-table" );
-    ch1.destroy();
-    ch2.destroy();
-    ch1 = new Chart(chart1).Pie(leftGraphData);
-    ch2 = new Chart(chart2).Bar(rightGraphData);
+  $( rows ).appendTo( "#body-table" );
+  ch1.destroy();
+  ch2.destroy();
 
-  }
+  leftGraphData = countProp(motionData,"location");
+  rightGraphData = createTimeData(motionData,"Motion Time");
 
-  function loadMotionTable(){
-    cleanTable();
-    setChartData("Popular Locations","Popular Time","Most Frequent Locations","Most Frequent Periods of Time");
-    $('#head-table tr').append('<td>Type</td>')
-    $('#head-table tr').append('<td>Location</td>')
-    $('#head-table tr').append('<td>Status</td>')
-    $('#head-table tr').append('<td>Time</td>')
+  ch1 = new Chart(chart1).Pie(leftGraphData);
+  ch2 = new Chart(chart2).Line(rightGraphData);
+}
 
-     var rows = "";
-    $.each(motionData, function(){
-    console.log(this);
-    rows += "<tr><td>" + this.type + "</td><td>" +this.location + "</td><td>" + this.status + "</td><td>" + this.time.toDateString()+ "</td></tr>";
-    });
+function loadSMSTable(){
+  cleanTable();
+  setChartData("Popular People","Popular Time","Most Frequent People","Most Frequent Periods of Time");
+  $('#head-table tr').append('<td>Type</td>')
+  $('#head-table tr').append('<td>To</td>')
+  $('#head-table tr').append('<td>Time</td>')
 
-    $( rows ).appendTo( "#body-table" );
-    ch1.destroy();
-    ch2.destroy();
+   var rows = "";
+  $.each(smsData, function(){
+  console.log(this);
+  rows += "<tr><td>" + this.type + "</td><td>" +  this.to + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes()+ "</td></tr>";
+  });
 
-    leftGraphData = countProp(motionData,"location");
-    rightGraphData = createTimeData(motionData,"Motion Time");
+  $( rows ).appendTo( "#body-table" );
+  ch1.destroy();
+  ch2.destroy();
+  leftGraphData = countProp(smsData,"to");
+  rightGraphData = createTimeData(smsData,"SMS Time");
+  ch1 = new Chart(chart1).Pie(leftGraphData);
+  ch2 = new Chart(chart2).Bar(rightGraphData);
+}
 
-    ch1 = new Chart(chart1).Pie(leftGraphData);
-    ch2 = new Chart(chart2).Line(rightGraphData);
-  }
+function loadLocationTable(){
+  cleanTable();
+  setChartData("Popular Locations","Popular Time","Most Frequent Locations","Most Frequent Periods of Time");
+  $('#head-table tr').append('<td>Type</td>')
+  $('#head-table tr').append('<td>Location</td>')
+  $('#head-table tr').append('<td>Time</td>')
 
-  function loadSMSTable(){
-    cleanTable();
-    setChartData("Popular People","Popular Time","Most Frequent People","Most Frequent Periods of Time");
-    $('#head-table tr').append('<td>Type</td>')
-    $('#head-table tr').append('<td>To</td>')
-    $('#head-table tr').append('<td>Time</td>')
+   var rows = "";
+  $.each(locationData, function(){
+  console.log(this);
+  rows += "<tr><td>" + this.type + "</td><td>" +  this.location + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes()+ "</td></tr>";
+  });
 
-     var rows = "";
-    $.each(smsData, function(){
-    console.log(this);
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.to + "</td><td>" + this.time.toDateString()+ "</td></tr>";
-    });
+  $( rows ).appendTo( "#body-table" );
+  ch1.destroy();
+  ch2.destroy();
 
-    $( rows ).appendTo( "#body-table" );
-    ch1.destroy();
-    ch2.destroy();
-    leftGraphData = countProp(smsData,"to");
-    rightGraphData = createTimeData(smsData,"SMS Time");
-    ch1 = new Chart(chart1).Pie(leftGraphData);
-    ch2 = new Chart(chart2).Bar(rightGraphData);
-  }
+  leftGraphData = countProp(locationData,"location");
+  rightGraphData = createTimeData(locationData,"Location Time");
 
-  function loadLocationTable(){
-    cleanTable();
-    setChartData("Popular Locations","Popular Time","Most Frequent Locations","Most Frequent Periods of Time");
-    $('#head-table tr').append('<td>Type</td>')
-    $('#head-table tr').append('<td>Location</td>')
-    $('#head-table tr').append('<td>Time</td>')
+  ch1 = new Chart(chart1).Pie(leftGraphData);
+  ch2 = new Chart(chart2).Line(rightGraphData);
+}
 
-     var rows = "";
-    $.each(locationData, function(){
-    console.log(this);
-    rows += "<tr><td>" + this.type + "</td><td>" +  this.location + "</td><td>" + this.time.toDateString()+ "</td></tr>";
-    });
+function notifyIcon(datatype){
+  $('#notification').html('New Data: ' + datatype);
+  mostRecent = datatype;
+  console.log("it worked");
+}
 
-    $( rows ).appendTo( "#body-table" );
-    ch1.destroy();
-    ch2.destroy();
-
-    leftGraphData = countProp(locationData,"location");
-    rightGraphData = createTimeData(locationData,"Location Time");
-
-    ch1 = new Chart(chart1).Pie(leftGraphData);
-    ch2 = new Chart(chart2).Line(rightGraphData);
-  }
-
-  function notifyIcon(datatype){
-    $('#notification').html('New Data: ' + datatype);
-    mostRecent = datatype;
-    console.log("it worked");
-  }
-
-  function clearNotification(){
-    $('#notification').html('No new data to report.');
-    mostRecent = "";
-  }
-
-  function refreshData(){
-    
-    $('#notification').html('Data is up to date.');
-  }
-
-  function refreshCurrentData(){
-    console.log("refresh");
-    switch(currentView){
-      case 'rpi-wifi':break;
-      case 'rpi-bt':break;
-      case 'wemo-switch':break;
-      case 'wemo-motion':break;
-      case 'android-sms':break;
-      case 'android-location':break;
-      default:break;
-    }
-  }
+function clearNotification(){
+  $('#notification').html('No new data to report.');
+  mostRecent = "";
+}
 
 function createTimeData(data,title){
   var myMap ={};
