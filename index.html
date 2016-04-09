@@ -144,13 +144,13 @@ body {
             <li id="RPI-WIFI"><a onClick="switchThing('RPI-WIFI')">Wi-Fi</a></li>
             <li id="RPI-BT"><a onClick="switchThing('RPI-BT')">Bluetooth</a></li>
           </ul>
-          <ul class="nav nav-sidebar" id="wemo"<a> WEMO </a>
-            <li class="" id="wemo-switch"><a onClick="switchThing('WEMO-SWITCH')">Switch</a></li>
-            <li class ="" id="wemo-motion"><a onClick="switchThing('WEMO-MOTION')">Motion</a></li>
+          <ul class="nav nav-sidebar" id="wemo"<a ="WEMO" >
+            <li class="" id="WEMO-SWITCH"><a onClick="switchThing('WEMO-SWITCH')">Switch</a></li>
+            <li class ="" id="WEMO-MOTION"><a onClick="switchThing('WEMO-MOTION')">Motion</a></li>
           </ul>
           <ul class="nav nav-sidebar" id="android"<a> Android </a>
-            <li id="android-sms"><a onClick="switchThing('ANDROID-SMS')">SMS</a></li>
-            <li id="android-location"><a onClick="switchThing('ANDROID-LOCATION')">Location</a></li>
+            <li id="ANDROID-SMS"><a onClick="switchThing('ANDROID-SMS')">SMS</a></li>
+            <li id="ANDROID-LOCATION"><a onClick="switchThing('ANDROID-LOCATION')">Location</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -187,10 +187,6 @@ body {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.0/Chart.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script src="bootstrap/js/vendor/holder.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap/js/ie10-viewport-bug-workaround.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script>
 
@@ -360,7 +356,7 @@ socket.on('_load', function(data){
   $.each(data.android_sms, function(){
       console.log(this);
       var obj = this;
-      var a = new androidLocation(obj);
+      var a = new androidSMS(obj);
       smsData.push(a);
   });
 });
