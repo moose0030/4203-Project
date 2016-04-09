@@ -242,26 +242,26 @@ function accessPoint(ap,t) {
     this.ssid = ap.ssid;
     this.channel = ap.channel;
     this.address = ap.address;
-    this.time = t;
+    this.time = new Date(t);
 }
 
 function bluetoothDevice(bd,t){
   this.name = bd.name;
   this.address = bd.address;
-  this.time = t;
+  this.time = new Date(t);
 }
 
 function wemoMotion(wm){
   this.type = wm.type;
   this.status = wm.status;
   this.location = "Living Room";
-  this.time = wm.time;
+  this.time = new Date(wm.time);
 }
 
 function wemoSwitch(ws){
   this.type = ws.type;
   this.mode =ws.mode;
-  this.time = ws.time;
+  this.time = new Date(ws.time);
 }
 
 function androidSMS(sms){
@@ -273,7 +273,7 @@ function androidSMS(sms){
 function androidLocation(al){
   this.type = al.type;
   this.location =al.location;
-  this.time = al.time;
+  this.time = new Date(al.time);
 }
 
 function simpleData(value,label,color){
