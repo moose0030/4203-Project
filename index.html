@@ -237,43 +237,43 @@ var ch2 = new Chart(chart2).Bar(emptyComplexData);
 
 ///////////////////        DATA TYPES         ////////////////////
 
-function accessPoint(ap) {
+function accessPoint(ap,t) {
     this.signal = new Number(ap.signal);
     this.ssid = ap.ssid;
     this.channel = ap.channel;
     this.address = ap.address;
-    this.time = new Date();
+    this.time = t;
 }
 
-function bluetoothDevice(bd){
+function bluetoothDevice(bd,t){
   this.name = bd.name;
   this.address = bd.address;
-  this.time = new Date();
+  this.time = t;
 }
 
 function wemoMotion(wm){
   this.type = wm.type;
   this.status = wm.status;
   this.location = "Living Room";
-  this.time = new Date();
+  this.time = wm.time;
 }
 
 function wemoSwitch(ws){
   this.type = ws.type;
   this.mode =ws.mode;
-  this.time = new Date();
+  this.time = ws.time;
 }
 
 function androidSMS(sms){
   this.type = sms.type;
   this.to =sms.to;
-  this.time = new Date();
+  this.time = sms.time;
 }
 
 function androidLocation(al){
   this.type = al.type;
   this.location =al.location;
-  this.time = new Date();
+  this.time = al.time;
 }
 
 function simpleData(value,label,color){
@@ -318,7 +318,7 @@ socket.on('_load', function(data){
     console.log(this);
     var obj = this;
     $.each(obj.devices, function(){
-      var a = new accessPoint(JSON.parse(this));
+      var a = new accessPoint(JSON.parse(this),obj.time);
       wifiData.push(a);
     });
   });
@@ -327,7 +327,7 @@ socket.on('_load', function(data){
     console.log(this);
     var obj = this;
     $.each(obj.devices, function(){
-      var a = new bluetoothDevice(JSON.parse(this));
+      var a = new bluetoothDevice(JSON.parse(this),obj.time);
       bluetoothData.push(a);
     });
   });
@@ -397,7 +397,7 @@ function loadData(data){
     case "RPI-WIFI":      
       wifiData.length = 0;
       $.each(data.devices, function(){
-        var a = new accessPoint(JSON.parse(this));
+        var a = new accessPoint(JSON.parse(this),data.time);
         wifiData.push(a);
       });
 
@@ -410,7 +410,7 @@ function loadData(data){
     case "RPI-BT": 
       bluetoothData.length = 0;
       $.each(data.devices, function(){
-        var a = new bluetoothDevice(JSON.parse(this));
+        var a = new bluetoothDevice(JSON.parse(this),data.time);
         bluetoothData.push(a);
       });
 

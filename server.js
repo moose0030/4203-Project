@@ -40,7 +40,7 @@ function handler (req, res) {
     req.on('end', function () {
         var json = body, obj = JSON.parse(json);  
         console.log(obj);
-        io.emit('_post',obj);
+        obj.time = new Date();
         switch(obj.type){
             case "RPI-WIFI":
             if(rpi_wifi.length< 20)
@@ -85,6 +85,8 @@ function handler (req, res) {
               android_sms.push(obj);
             }break;
         }
+        console.log(obj);
+        io.emit('_post',obj);
     });
   }
 }
