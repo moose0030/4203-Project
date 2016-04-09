@@ -194,12 +194,10 @@ body {
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script>
 
-
 ///////////////////     EXAMPLE DATA        //////////////////////
 var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4'];
 var colours2= ['#EBB802','#4DCD01','#D70133','#2617A3'];
 var emptySimpleData = [];
- 
 var emptyComplexData = {
     labels: [],
     datasets: [
@@ -213,6 +211,35 @@ var emptyComplexData = {
         }
     ]
 };
+
+///////////////////     HTML ELEMENTS       //////////////////////
+var chart1 = document.getElementById('chart1').getContext("2d");
+var chart2 = document.getElementById('chart2').getContext("2d");
+var table = document.getElementById('data-table');
+
+//////////////////    GLOBAL VARIABLES     //////////////////////
+
+var wifiData = [];
+var bluetoothData = [];
+
+var switchData=[];
+var motionData = [];
+
+var smsData = [];
+var locationData = [];
+
+var leftGraphData = [];
+var rightGraphData;
+
+var updateInterval = 1000;
+var currentView = "RPI-WIFI";
+
+var mostRecent = "";
+
+var ch1 = new Chart(chart1).PolarArea(emptySimpleData);
+var ch2 = new Chart(chart2).Bar(emptyComplexData);
+
+///////////////////        DATA TYPES         ////////////////////
 
 function accessPoint(ap) {
     this.signal = new Number(ap.signal);
@@ -270,34 +297,6 @@ function complexData(labels,l,d){
     data : d
   }];
 }
-
-///////////////////     HTML ELEMENTS       //////////////////////
-var chart1 = document.getElementById('chart1').getContext("2d");
-var chart2 = document.getElementById('chart2').getContext("2d");
-var table = document.getElementById('data-table');
-
-//////////////////         DATA          /////////////////////////
-
-var wifiData = [];
-var bluetoothData = [];
-
-var switchData=[];
-var motionData = [];
-
-var smsData = [];
-var locationData = [];
-
-var leftGraphData = [];
-var rightGraphData;
-
-var updateInterval = 1000;
-var currentView = "RPI-WIFI";
-
-var mostRecent = "";
-
-var ch1 = new Chart(chart1).PolarArea(emptySimpleData);
-var ch2 = new Chart(chart2).Bar(emptyComplexData);
-
 
 ///////////////////     EVENT LISTENERS       //////////////////////
 $('#choose-speed li').on('click', function(){
@@ -718,7 +717,6 @@ function countProp(data,property){
   console.log(values);
     return values;
 }
-
-    </script>
-  </body>
+</script>
+</body>
 </html>

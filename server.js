@@ -40,7 +40,6 @@ function handler (req, res) {
     req.on('end', function () {
         var json = body, obj = JSON.parse(json);  
         console.log(obj);
-        //io.emit('_post',obj.type,obj);
         io.emit('_post',obj);
         switch(obj.type){
             case "RPI-WIFI":
