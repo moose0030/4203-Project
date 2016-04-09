@@ -267,7 +267,7 @@ function wemoSwitch(ws){
 function androidSMS(sms){
   this.type = sms.type;
   this.to =sms.to;
-  this.time = sms.time;
+  this.time = new Date(sms.time);
 }
 
 function androidLocation(al){
