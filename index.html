@@ -158,12 +158,12 @@ body {
           <div class="row placeholders">
             <div class="col-xs-6 placeholder">
                <canvas id="chart1" width="300" height="300"></canvas>
-              <h4 id ="chart1-title">No data yet...</h4>
+              <h4 id ="chart1-title">Please select a device from the list on the left</h4>
               <span class="text-muted" id="chart1-desc"></span>
             </div>
             <div class="col-xs-6 placeholder">
              <canvas id="chart2" width="300" height="300"></canvas>
-              <h4 id ="chart2-title">No data yet...</h4>
+              <h4 id ="chart2-title"></h4>
               <span class="text-muted" id="chart2-desc"></span>
             </div>
           </div>
@@ -218,7 +218,7 @@ var table = document.getElementById('data-table');
 var wifiData = [];
 var bluetoothData = [];
 
-var switchData=[];
+var switchData = [];
 var motionData = [];
 
 var smsData = [];
@@ -352,7 +352,7 @@ socket.on('_load', function(data){
       var a = new androidLocation(obj);
       locationData.push(a);
   });
-
+  
   $.each(data.android_sms, function(){
       console.log(this);
       var obj = this;
@@ -498,7 +498,7 @@ function cleanTable(){
 
 function loadWifiTable(){
   cleanTable();
-  setChartData("Signal Strength","Channels","Measured in dB","Number of Access Points/Channel");
+  setChartData("Signal Strength","Channels","Measured in dB(Smaller is better)","Wireless Channel of Each Access Point");
   $('#head-table tr').append('<td>SSID</td>')
   $('#head-table tr').append('<td>Signal Strength</td>')
   $('#head-table tr').append('<td>Channel</td>')
@@ -609,7 +609,7 @@ function loadMotionTable(){
 
 function loadSMSTable(){
   cleanTable();
-  setChartData("Popular People","Popular Time","Most Frequent People","Most Frequent Periods of Time");
+  setChartData("Popular People","Popular Time","Most Frequent People Texted To","Most Frequent Periods of Time");
   $('#head-table tr').append('<td>Type</td>')
   $('#head-table tr').append('<td>To</td>')
   $('#head-table tr').append('<td>Time</td>')
@@ -631,7 +631,7 @@ function loadSMSTable(){
 
 function loadLocationTable(){
   cleanTable();
-  setChartData("Popular Locations","Popular Time","Most Frequent Locations","Most Frequent Periods of Time");
+  setChartData("Popular Locations","Popular Time","Most Frequent Locations Visited","Most Frequent Periods of Time");
   $('#head-table tr').append('<td>Type</td>')
   $('#head-table tr').append('<td>Location</td>')
   $('#head-table tr').append('<td>Time</td>')
