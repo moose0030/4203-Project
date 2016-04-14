@@ -81,8 +81,7 @@ function handler (req, res) {
             if(android_sms.length< 20)
               android_sms.push(obj);
             else{
-              android_sms.pop();
-              android_sms.push(obj);
+              return;
             }break;
         }
         console.log(obj);
