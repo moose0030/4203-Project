@@ -191,8 +191,7 @@ body {
     <script>
 
 ///////////////////     EXAMPLE DATA        //////////////////////
-var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4'];
-var colours2= ['#EBB802','#4DCD01','#D70133','#2617A3'];
+var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4','#EBB802','#4DCD01','#D70133','#2617A3'];
 var emptySimpleData = [];
 var emptyComplexData = {
     labels: [],
@@ -230,6 +229,8 @@ var rightGraphData;
 var updateInterval = 1000;
 var currentView = "RPI-WIFI";
 
+
+var locations = ["Living Room","Kitchen","Hallway","Front Door"];
 var mostRecent = "";
 
 var ch1 = new Chart(chart1).PolarArea(emptySimpleData);
@@ -254,13 +255,13 @@ function bluetoothDevice(bd,t){
 function wemoMotion(wm){
   this.type = wm.type;
   this.status = wm.status;
-  this.location = "Living Room";
+  this.location = locations[Math.floor((Math.random() * 4))];
   this.time = new Date(wm.time);
 }
 
 function wemoSwitch(ws){
   this.type = ws.type;
-  this.mode =ws.mode;
+  this.mode = ws.mode;
   this.time = new Date(ws.time);
 }
 
@@ -276,10 +277,10 @@ function androidLocation(al){
   this.time = new Date(al.time);
 }
 
-function simpleData(value,label,color){
+function simpleData(value,label){
   this.value = value;
   this.label = label;
-  this.color = color;
+  this.color = colours[Math.floor((Math.random() * 8))];
 }
 
 function complexData(labels,l,d){
@@ -512,7 +513,7 @@ function loadWifiTable(){
   $.each(wifiData, function(){
   console.log(this);
 
-  leftGraphData.push(new simpleData(-1*new Number(this.signal),this.ssid,colours[0]));
+  leftGraphData.push(new simpleData(-1*new Number(this.signal),this.ssid));
   channels.push(this.channel);
   labels.push(this.ssid);
   rows += "<tr><td>" + this.ssid + "</td><td>" + this.signal + "</td><td>" + this.channel + "</td><td>" + this.address + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes() +"</td></tr>";
@@ -569,8 +570,8 @@ function loadSwitchTable(){
   rows += "<tr><td>" + this.type + "</td><td>" +  this.mode + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes()+ "</td></tr>";
   });
 
-  leftGraphData.push(new simpleData(on,"on",colours[0]));
-  leftGraphData.push(new simpleData(off,"off",colours[1]));
+  leftGraphData.push(new simpleData(on,"on"));
+  leftGraphData.push(new simpleData(off,"off"));
   rightGraphData = createTimeData(switchData,"Switch Time");
   $( rows ).appendTo( "#body-table" );
   
@@ -707,7 +708,7 @@ function countProp(data,property){
   var axis =[];
   for(var prop in myMap) {
       count = myMap[prop]
-      values.push(new simpleData(count,prop,colours[2]));
+      values.push(new simpleData(count,prop));
       console.log(prop,count);
   }
   console.log(values);
