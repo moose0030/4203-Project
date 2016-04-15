@@ -262,6 +262,7 @@ function wemoMotion(wm){
 function wemoSwitch(ws){
   this.type = ws.type;
   this.mode = ws.mode;
+  this.location = locations[Math.floor((Math.random() * 4))];
   this.time = new Date(ws.time);
 }
 
@@ -499,7 +500,16 @@ function cleanTable(){
 
 function loadWifiTable(){
   cleanTable();
-  setChartData("Signal Strength","Channels","Measured in dB(Smaller is better)","Wireless Channel of Each Access Point");
+  ch1.destroy();
+  ch2.destroy();
+  
+  if(wifiData.length >0)
+    setChartData("Signal Strength","Channels","Measured in dB(Smaller is better)","Wireless Channel of Each Access Point");
+  else{
+    setChartData("No data to load...","No data to load...","","");
+    return;
+  }
+  
   $('#head-table tr').append('<td>SSID</td>')
   $('#head-table tr').append('<td>Signal Strength</td>')
   $('#head-table tr').append('<td>Channel</td>')
@@ -521,8 +531,7 @@ function loadWifiTable(){
   rightGraphData = new complexData(labels,"Channels",channels);
   $( rows ).appendTo( "#body-table" );
 
-  ch1.destroy();
-  ch2.destroy();
+  
 
   ch1 = new Chart(chart1).PolarArea(leftGraphData);
   ch2 = new Chart(chart2).Bar(rightGraphData);
@@ -530,7 +539,16 @@ function loadWifiTable(){
 
 function loadBluetoothTable(){
   cleanTable();
-  setChartData("Number of Nearby Devices","","","");
+  ch1.destroy();
+  ch2.destroy();
+  
+  if(bluetoothData.length >0)
+    setChartData("Number of Nearby Devices","","","");
+  else{
+    setChartData("No data to load...","No data to load...","","");
+    return;
+  }
+  
   $('#head-table tr').append('<td>Device</td>')
   $('#head-table tr').append('<td>Address</td>')
   $('#head-table tr').append('<td>Time</td>')
@@ -543,17 +561,23 @@ function loadBluetoothTable(){
   rightGraphData = createTimeData(bluetoothData,"Bluetooth Connections");
 
   $( rows ).appendTo( "#body-table" );
-  
-  ch1.destroy();
-  ch2.destroy();
-  
+ 
   ch1 = new Chart(chart1).Bar(rightGraphData);  
 }
 
 function loadSwitchTable(){
   cleanTable();
-  setChartData("Popular Events","Popular Time","Most Frequent Events","Most Frequent Periods of Time");
+  ch1.destroy();
+  ch2.destroy();
+  if(switchData.length >0)
+    setChartData("Popular Events","Popular Time","Most Frequent Events","Most Frequent Periods of Time");
+  else{
+    setChartData("No data to load...","No data to load...","","");
+    return;
+  }
+  
   $('#head-table tr').append('<td>Type</td>')
+  $('#head-table tr').append('<td>Location</td>')
   $('#head-table tr').append('<td>Mode</td>')
   $('#head-table tr').append('<td>Time</td>')
   var rows = "";
@@ -567,7 +591,7 @@ function loadSwitchTable(){
     on++;
   if(this.mode == 'off')
     off++;
-  rows += "<tr><td>" + this.type + "</td><td>" +  this.mode + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes()+ "</td></tr>";
+  rows += "<tr><td>" + this.type + "</td><td>" +   this.location + "</td><td>" +  this.mode + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes()+ "</td></tr>";
   });
 
   leftGraphData.push(new simpleData(on,"on"));
@@ -575,8 +599,6 @@ function loadSwitchTable(){
   rightGraphData = createTimeData(switchData,"Switch Time");
   $( rows ).appendTo( "#body-table" );
   
-  ch1.destroy();
-  ch2.destroy();
   
   ch1 = new Chart(chart1).Pie(leftGraphData);
   ch2 = new Chart(chart2).Bar(rightGraphData);
@@ -585,7 +607,14 @@ function loadSwitchTable(){
 
 function loadMotionTable(){
   cleanTable();
-  setChartData("Popular Locations","Popular Time","Most Frequent Locations","Most Frequent Periods of Time");
+  ch1.destroy();
+  ch2.destroy();
+  if(motionData.length >0)
+    setChartData("Popular Locations","Popular Time","Most Frequent Locations","Most Frequent Periods of Time");
+  else{
+    setChartData("No data to load...","No data to load...","","");
+    return;
+  }
   $('#head-table tr').append('<td>Type</td>')
   $('#head-table tr').append('<td>Location</td>')
   $('#head-table tr').append('<td>Status</td>')
@@ -598,8 +627,7 @@ function loadMotionTable(){
   });
 
   $( rows ).appendTo( "#body-table" );
-  ch1.destroy();
-  ch2.destroy();
+  
 
   leftGraphData = countProp(motionData,"location");
   rightGraphData = createTimeData(motionData,"Motion Time");
@@ -610,7 +638,15 @@ function loadMotionTable(){
 
 function loadSMSTable(){
   cleanTable();
-  setChartData("Popular People","Popular Time","Most Frequent People Texted To","Most Frequent Periods of Time");
+  ch1.destroy();
+  ch2.destroy();
+  if(smsData.length >0)
+    setChartData("Popular People","Popular Time","Most Frequent People Texted To","Most Frequent Periods of Time");
+  else{
+    setChartData("No data to load...","No data to load...","","");
+    return;
+  }
+  
   $('#head-table tr').append('<td>Type</td>')
   $('#head-table tr').append('<td>To</td>')
   $('#head-table tr').append('<td>Time</td>')
@@ -632,7 +668,15 @@ function loadSMSTable(){
 
 function loadLocationTable(){
   cleanTable();
-  setChartData("Popular Locations","Popular Time","Most Frequent Locations Visited","Most Frequent Periods of Time");
+  ch1.destroy();
+  ch2.destroy();
+  if(locationData.length >0)
+    setChartData("Popular Locations","Popular Time","Most Frequent Locations Visited","Most Frequent Periods of Time");
+  else{
+    setChartData("No data to load...","No data to load...","","");
+    return;
+  }
+  
   $('#head-table tr').append('<td>Type</td>')
   $('#head-table tr').append('<td>Location</td>')
   $('#head-table tr').append('<td>Time</td>')
