@@ -191,7 +191,7 @@ body {
     <script>
 
 ///////////////////     EXAMPLE DATA        //////////////////////
-var colours = ['#FF9058','#FFD958','#53F3BF','#766AF4','#EBB802','#4DCD01','#D70133','#2617A3','#53FF00','#07D0FF','#FF7F00','#FF0032','#979308','#056347','#973A08','#3F0B65'];
+var colours = ['#F73CFF','#0064FF','#00FF3C','#FFDF0D','#FF4400'];
 var emptySimpleData = [];
 var emptyComplexData = {
     labels: [],
@@ -281,7 +281,7 @@ function androidLocation(al){
 function simpleData(value,label){
   this.value = value;
   this.label = label;
-  this.color = colours[Math.floor((Math.random() * 16))];
+  this.color = colours[Math.floor((Math.random() * colours.length))];
 }
 
 function complexData(labels,l,d){
@@ -410,7 +410,6 @@ function loadData(data){
       break;
 
     case "RPI-BT": 
-      bluetoothData.length = 0;
       $.each(data.devices, function(){
         var a = new bluetoothDevice(JSON.parse(this),data.time);
         bluetoothData.push(a);
@@ -542,7 +541,7 @@ function loadBluetoothTable(){
   ch1.destroy();
   ch2.destroy();
   
-  if(bluetoothData.length >0)
+  if(bluetoothData.length > 0)
     setChartData("Number of Nearby Devices","","","");
   else{
     setChartData("No data to load...","No data to load...","","");
