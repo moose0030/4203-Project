@@ -1,5 +1,9 @@
-///////////////////     EXAMPLE DATA        //////////////////////
-var colours = ['#F73CFF','#0064FF','#00FF3C','#FFDF0D','#FF4400'];
+// Shorthand for $( document ).ready()
+$(function() {
+    console.log( "ready!" );
+});
+
+var colours = ["#F73CFF","#0064FF","#00FF3C","#FFDF0D","#FF4400"];
 var emptySimpleData = [];
 var emptyComplexData = {
     labels: [],
@@ -16,9 +20,9 @@ var emptyComplexData = {
 };
 
 ///////////////////     HTML ELEMENTS       //////////////////////
-var chart1 = document.getElementById('chart1').getContext("2d");
-var chart2 = document.getElementById('chart2').getContext("2d");
-var table = document.getElementById('data-table');
+var chart1 = document.getElementById("chart1").getContext("2d");
+var chart2 = document.getElementById("chart2").getContext("2d");
+var table = document.getElementById("data-table");
 
 //////////////////    GLOBAL VARIABLES     //////////////////////
 
@@ -105,13 +109,13 @@ function complexData(labels,l,d){
 }
 
 ///////////////////     EVENT LISTENERS       //////////////////////
-$('#choose-speed li').on('click', function(){
+$("#choose-speed li").on("click", function(){
   console.log($(this).text());
   updateInterval = new Number($(this).text());
 });
 
 var socket = io();
-socket.on('_post', function(data){
+socket.on("_post", function(data){
   console.log(data);
 
   var obj = data;//JSON.parse(data);
@@ -123,7 +127,7 @@ socket.on('_post', function(data){
     }
 });
 
-socket.on('_load', function(data){
+socket.on("_load", function(data){
   $.each(data.rpi_wifi, function(){
     console.log(this);
     var obj = this;
@@ -175,25 +179,41 @@ socket.on('_load', function(data){
   
 
 ///////////////////       FUNCTIONS         //////////////////////
+// add event listener to table
+window.onload = function () {
+  document.getElementById("ANDROID-SMS").addEventListener("click", anchorClick, false);
+  document.getElementById("ANDROID-LOCATION").addEventListener("click", anchorClick, false);
+  document.getElementById("RPI-WIFI").addEventListener("click", anchorClick, false);
+  document.getElementById("RPI-BT").addEventListener("click", anchorClick, false);
+  document.getElementById("WEMO-MOTION").addEventListener("click", anchorClick, false);
+  document.getElementById("WEMO-SWITCH").addEventListener("click", anchorClick, false);
+}
+
+function anchorClick(event){
+  console.log(event.target.id);
+  switchThing(event.target.id);
+}
 
 function switchThing(option){
+  console.log("Switch perspective");
+  console.log(option);
     $( "#overview" ).children().removeClass();
     $( "#raspberrypi" ).children().removeClass();
     $( "#wemo" ).children().removeClass();
     $( "#android" ).children().removeClass();
-    $('#' + option).addClass("active");
+    $("#" + option).parent('li').addClass("active");
     currentView = option;
 
     if(option == mostRecent)
       clearNotification();
 
     switch(option){
-      case 'RPI-WIFI':loadWifiTable();break;
-      case 'RPI-BT':loadBluetoothTable();break;
-      case 'WEMO-SWITCH':loadSwitchTable();break;
-      case 'WEMO-MOTION':loadMotionTable();break;
-      case 'ANDROID-SMS':loadSMSTable();break;
-      case 'ANDROID-LOCATION':loadLocationTable();break;
+      case "RPI-WIFI":loadWifiTable();break;
+      case "RPI-BT":loadBluetoothTable();break;
+      case "WEMO-SWITCH":loadSwitchTable();break;
+      case "WEMO-MOTION":loadMotionTable();break;
+      case "ANDROID-SMS":loadSMSTable();break;
+      case "ANDROID-LOCATION":loadLocationTable();break;
     }
   }
 
@@ -213,7 +233,7 @@ function loadData(data){
 
       if(data.type == currentView){
         loadWifiTable();
-        $('#table-title').text("Wi-Fi Data");
+        $("#table-title").text("Wi-Fi Data");
       }
       break;
 
@@ -225,7 +245,7 @@ function loadData(data){
 
       if(data.type == currentView){
         loadBluetoothTable();
-        $('#table-title').text("Bluetooth Data");
+        $("#table-title").text("Bluetooth Data");
       }
       break;
 
@@ -240,7 +260,7 @@ function loadData(data){
 
       if(data.type == currentView){
         loadSwitchTable();
-        $('#table-title').text("WeMo Switch Data");
+        $("#table-title").text("WeMo Switch Data");
       }
       break;
 
@@ -254,7 +274,7 @@ function loadData(data){
       }
       if(data.type == currentView){
         loadMotionTable();
-        $('#table-title').text("WeMo Motion Data");
+        $("#table-title").text("WeMo Motion Data");
       }
       break;
 
@@ -269,7 +289,7 @@ function loadData(data){
       
       if(data.type == currentView){
         loadLocationTable();
-        $('#table-title').text("Android Location Data");
+        $("#table-title").text("Android Location Data");
       }
       break;
 
@@ -284,7 +304,7 @@ function loadData(data){
       
       if(data.type == currentView){
         loadSMSTable();
-        $('#table-title').text("Android SMS Data");
+        $("#table-title").text("Android SMS Data");
       }
       break;
 
@@ -293,10 +313,10 @@ function loadData(data){
 }
  
 function setChartData(title1,title2,desc1,desc2){
-  $('#chart1-desc').text(desc1);
-  $('#chart2-desc').text(desc2);
-  $('#chart1-title').text(title1);
-  $('#chart2-title').text(title2);
+  $("#chart1-desc").text(desc1);
+  $("#chart2-desc").text(desc2);
+  $("#chart1-title").text(title1);
+  $("#chart2-title").text(title2);
 }
 
 function cleanTable(){
@@ -317,11 +337,11 @@ function loadWifiTable(){
     return;
   }
   
-  $('#head-table tr').append('<td>SSID</td>')
-  $('#head-table tr').append('<td>Signal Strength</td>')
-  $('#head-table tr').append('<td>Channel</td>')
-  $('#head-table tr').append('<td>Address</td>')
-  $('#head-table tr').append('<td>Time</td>')
+  $("#head-table tr").append("<td>SSID</td>")
+  $("#head-table tr").append("<td>Signal Strength</td>")
+  $("#head-table tr").append("<td>Channel</td>")
+  $("#head-table tr").append("<td>Address</td>")
+  $("#head-table tr").append("<td>Time</td>")
   leftGraphData.length = 0;
   var rows = "";
   var channels = [];
@@ -356,9 +376,9 @@ function loadBluetoothTable(){
     return;
   }
   
-  $('#head-table tr').append('<td>Device</td>')
-  $('#head-table tr').append('<td>Address</td>')
-  $('#head-table tr').append('<td>Time</td>')
+  $("#head-table tr").append("<td>Device</td>")
+  $("#head-table tr").append("<td>Address</td>")
+  $("#head-table tr").append("<td>Time</td>")
 
   var rows = ""; 
   $.each(bluetoothData, function(){
@@ -383,10 +403,10 @@ function loadSwitchTable(){
     return;
   }
   
-  $('#head-table tr').append('<td>Type</td>')
-  $('#head-table tr').append('<td>Location</td>')
-  $('#head-table tr').append('<td>Mode</td>')
-  $('#head-table tr').append('<td>Time</td>')
+  $("#head-table tr").append("<td>Type</td>")
+  $("#head-table tr").append("<td>Location</td>")
+  $("#head-table tr").append("<td>Mode</td>")
+  $("#head-table tr").append("<td>Time</td>")
   var rows = "";
   var on = 0;
   var off = 0;
@@ -394,9 +414,9 @@ function loadSwitchTable(){
   
   $.each(switchData, function(){
   console.log(this);
-  if(this.mode == 'on')
+  if(this.mode == "on")
     on++;
-  if(this.mode == 'off')
+  if(this.mode == "off")
     off++;
   rows += "<tr><td>" + this.type + "</td><td>" +   this.location + "</td><td>" +  this.mode + "</td><td>" + this.time.toDateString() +" at "+ this.time.getHours() +":"+ this.time.getMinutes()+ "</td></tr>";
   });
@@ -422,10 +442,10 @@ function loadMotionTable(){
     setChartData("No data to load...","No data to load...","","");
     return;
   }
-  $('#head-table tr').append('<td>Type</td>')
-  $('#head-table tr').append('<td>Location</td>')
-  $('#head-table tr').append('<td>Status</td>')
-  $('#head-table tr').append('<td>Time</td>')
+  $("#head-table tr").append("<td>Type</td>")
+  $("#head-table tr").append("<td>Location</td>")
+  $("#head-table tr").append("<td>Status</td>")
+  $("#head-table tr").append("<td>Time</td>")
 
    var rows = "";
   $.each(motionData, function(){
@@ -454,9 +474,9 @@ function loadSMSTable(){
     return;
   }
   
-  $('#head-table tr').append('<td>Type</td>')
-  $('#head-table tr').append('<td>To</td>')
-  $('#head-table tr').append('<td>Time</td>')
+  $("#head-table tr").append("<td>Type</td>")
+  $("#head-table tr").append("<td>To</td>")
+  $("#head-table tr").append("<td>Time</td>")
 
    var rows = "";
   $.each(smsData, function(){
@@ -484,9 +504,9 @@ function loadLocationTable(){
     return;
   }
   
-  $('#head-table tr').append('<td>Type</td>')
-  $('#head-table tr').append('<td>Location</td>')
-  $('#head-table tr').append('<td>Time</td>')
+  $("#head-table tr").append("<td>Type</td>")
+  $("#head-table tr").append("<td>Location</td>")
+  $("#head-table tr").append("<td>Time</td>")
 
    var rows = "";
   $.each(locationData, function(){
@@ -506,13 +526,13 @@ function loadLocationTable(){
 }
 
 function notifyIcon(datatype){
-  $('#notification').html('New Data: ' + datatype);
+  $("#notification").html("New Data: " + datatype);
   mostRecent = datatype;
   console.log("it worked");
 }
 
 function clearNotification(){
-  $('#notification').html('No new data to report.');
+  $("#notification").html("No new data to report.");
   mostRecent = "";
 }
 
